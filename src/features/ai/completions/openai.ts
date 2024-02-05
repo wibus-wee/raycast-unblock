@@ -80,9 +80,15 @@ export async function OpenAIChatCompletion(request: FastifyRequest, reply: Fasti
   return reply.sse((async function * source() {
     try {
       for await (const data of stream) {
-        const res = {
-          text: data.choices[0].delta.content,
-        }
+        const { choices: [{ delta: { content }, finish_reason }] } = data
+
+        if (!content && !finish_reason)
+          continue // ignore this line
+
+        const res: Record<string, unknown> = { text: content || '' }
+        if (finish_reason)
+          res.finish_reason = finish_reason
+
         yield { data: JSON.stringify(res) }
       }
     }
