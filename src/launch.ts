@@ -49,7 +49,7 @@ export function launch() {
   consola.info(`Raycast Unblock`)
   consola.info(`Version: ${packageJson.version}`)
   consola.info('Proxy Server starting...')
-  fastify.listen({ port: (process.env.PORT ? Number(process.env.PORT) : 3000), host: (process.env.LISTEN || '127.0.0.1') }, (err, address) => {
+  fastify.listen({ port: (process.env.PORT ? Number(process.env.PORT) : 3000), host: (process.env.HOST || '127.0.0.1') }, (err, address) => {
     if (err) {
       consola.error(err)
       process.exit(1)

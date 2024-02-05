@@ -12,6 +12,7 @@ export interface EnvConfig {
   TRANSLATE_TYPE: 'shortcut' | 'ai' | 'custom' | 'github'
   TRANSLATE_API_KEY?: string
   PORT: string
+  HOST: string
 }
 
 export const KeyOfEnvConfig: (keyof EnvConfig)[] = [
@@ -23,6 +24,7 @@ export const KeyOfEnvConfig: (keyof EnvConfig)[] = [
   'TRANSLATE_TYPE',
   'TRANSLATE_API_KEY',
   'PORT',
+  'HOST',
 ]
 
 export interface AIConfig {
