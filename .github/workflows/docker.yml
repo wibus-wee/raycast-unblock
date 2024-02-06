@@ -12,12 +12,7 @@ on:
 
 jobs:
   docker:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest]
-      fail-fast: false
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
