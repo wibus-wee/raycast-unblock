@@ -11,9 +11,9 @@ RUN pnpm build:rollup
 RUN pnpm bundle
 
 
-FROM alpine as runner
+FROM alpine:3.16 as runner
 
-# RUN apk add zip unzip mongodb-tools rsync
+RUN apk add --no-cache libstdc++
 
 WORKDIR /app
 
