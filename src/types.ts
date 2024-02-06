@@ -13,6 +13,7 @@ export interface EnvConfig {
   TRANSLATE_API_KEY?: string
   PORT: string
   HOST: string
+  ENV: string
 }
 
 export const KeyOfEnvConfig: (keyof EnvConfig)[] = [
@@ -25,6 +26,7 @@ export const KeyOfEnvConfig: (keyof EnvConfig)[] = [
   'TRANSLATE_API_KEY',
   'PORT',
   'HOST',
+  'ENV',
 ]
 
 export interface AIConfig {

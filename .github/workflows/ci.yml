@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - main
-
+    paths-ignore:
+      - test/**
+      - README.md
+      - LICENSE
   pull_request:
     branches:
       - main

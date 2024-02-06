@@ -1,14 +1,15 @@
-import 'dotenv/config'
 import process from 'node:process'
 import fs from 'node:fs'
 import consola from 'consola'
 import packageJson from '../package.json'
 import { prepareSync } from './features/sync/pre'
 import { launch } from './launch'
-import { checkAIConfig } from './utils/env.util'
+import { checkAIConfig, injectEnv } from './utils/env.util'
 import { DATA, TMP } from './constants'
 import { prepareShortcutRunner } from './utils/shortcuts.util'
 import { prepareCache, registCache } from './utils/cache.util'
+
+injectEnv()
 
 process.title = packageJson.name
 
