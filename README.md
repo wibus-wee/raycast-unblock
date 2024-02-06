@@ -11,6 +11,15 @@ Unblock all features in Raycast Pro Plan.
 > This project is for educational purposes only.
 > Please do not use it for commercial purposes.
 
+## Quick Start
+
+```bash
+docker run -d --name raycast-unblock -p 3000:3000 --ai_key=your-open-ai-key --openai_base_url=https://api.openai.com --ai_type=openai --host=0.0.0.0 wibuswee/raycast-unblock:latest
+```
+
+> [!NOTE]
+> Replace `your-open-ai-key` with your OpenAI API key.
+
 ## Disclaimer
 
 We only borrowed the **operation interface** of Raycast, and **did not modify the backend server** of Raycast.
@@ -91,6 +100,8 @@ docker run -d \
   --name raycast-unblock \
   -p 3000:3000 \
   --ai_type=openai \
+  --openai_base_url=https://api.openai.com \
+  --ai_key=your-open-ai-key \
   --host=0.0.0.0
   wibuswee/raycast-unblock:latest
 ```
