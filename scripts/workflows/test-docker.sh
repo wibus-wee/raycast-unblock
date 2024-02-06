@@ -15,7 +15,7 @@ RETRY=0
 (docker run --rm -p 3000:3000 $IMAGE_TAG &)
 
 do_request() {
-  curl -f -m 10 localhost:3000
+  curl -f -m 10 http://127.0.0.1:3000
 }
 
 do_request
