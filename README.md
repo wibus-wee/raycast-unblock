@@ -62,6 +62,42 @@ See [Unblock Features](#unblock-features) and [Unblock Routes](#unblock-routes) 
 
 ## Usage
 
+### Docker (Recommended)
+
+You can use Docker to run Raycast Unblock.
+
+#### Pull Image
+
+```bash
+docker pull wibuswee/raycast-unblock:latest
+```
+
+#### Run
+
+```bash
+docker run -d \
+  --name raycast-unblock \
+  -p 3000:3000 \
+  --env /path/to/your/.env:/app/.env \
+  wibuswee/raycast-unblock:latest
+```
+
+You should replace `/path/to/your/.env` with your `.env` file path. Or directly use parameter settings to set variables:
+
+Change the environment variables in the `.env.example` file to trailing parameters and pass them to the `docker run` command. For example:
+
+```bash
+docker run -d \
+  --name raycast-unblock \
+  -p 3000:3000 \
+  --ai_type=openai \
+  --host=0.0.0.0
+  wibuswee/raycast-unblock:latest
+```
+
+> [!NOTE]
+> The key should be lowercase and use underscores to separate words.
+
 ### Download dist from actions
 
 You can download the latest dist from [GitHub Actions](https://github.com/wibus-wee/raycast-unblock/actions/workflows/ci.yml).
