@@ -17,7 +17,6 @@ Unblock all features in Raycast Pro Plan.
 docker run -d --name raycast-unblock -p 3000:3000 --ai_key=your-open-ai-key --openai_base_url=https://api.openai.com --ai_type=openai --host=0.0.0.0 wibuswee/raycast-unblock:latest
 ```
 
-> [!NOTE]
 > Replace `your-open-ai-key` with your OpenAI API key.
 
 ## Disclaimer
