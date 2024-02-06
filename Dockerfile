@@ -8,20 +8,20 @@ RUN npm i -g pnpm
 RUN pnpm install
 RUN pnpm build
 RUN pnpm build:rollup
-# RUN pnpm bundle
+RUN pnpm bundle
 
 
-FROM node:21-alpine as runner
+FROM alpine as runner
 
 # RUN apk add zip unzip mongodb-tools rsync
 
 WORKDIR /app
 
-# COPY --from=builder /app/dist/raycast-unblock-app .
-COPY --form=builder /app/dist/index.js .
+COPY --from=builder /app/dist/raycast-unblock-app .
 
 ENV TZ=Asia/Shanghai
 
 EXPOSE 3000
 
-CMD ["node", "index.js"]
+# CMD ["node", "index.js"]
+ENTRYPOINT ["./raycast-unblock-app"]
