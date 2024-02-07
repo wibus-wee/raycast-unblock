@@ -1,7 +1,7 @@
 {
   "name": "raycast-unblock",
   "type": "module",
-  "version": "0.1.0-beta.8",
+  "version": "0.2.0-beta.0",
   "packageManager": "pnpm@8.14.0",
   "description": "Unblock all features in Raycast Pro Plan",
   "author": "wibus-wee <wibus@qq.com>",
