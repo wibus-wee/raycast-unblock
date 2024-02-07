@@ -1,8 +1,8 @@
 import consola from 'consola'
 import { generateCopilotRequestHeader, getAuthFromToken } from '../../../services/copilot'
-import type { AIGenerateContent } from '../../../types'
-import { getAIConfig } from '../../../utils/env.util'
+import { getConfig } from '../../../utils/env.util'
 import { copilotClient } from '../../../utils'
+import type { AIGenerateContent } from '../../../types/internal/ai-generate-content'
 
 const completions = '/chat/completions'
 
@@ -10,6 +10,9 @@ export async function CopilotGenerateContent(prompt: {
   role: string
   content: string
 }[], msg?: string): Promise<AIGenerateContent> {
+  const aiConfig = getConfig('ai')
+  const config = getConfig('ai')?.copilot
+
   const messages = []
   for (const m of prompt) {
     messages.push({
@@ -24,7 +27,7 @@ export async function CopilotGenerateContent(prompt: {
     })
   }
 
-  const app_token = getAIConfig().key
+  const app_token = config?.apiKey
   if (!app_token) {
     consola.error(`[Copilot] Auth error: Missing token`)
     throw new Error('Unauthorized. Missing token')
@@ -37,14 +40,15 @@ export async function CopilotGenerateContent(prompt: {
     throw new Error(`Unauthorized. Invalid token. ${e.message}`)
   }
 
-  const temperature = Number(getAIConfig().temperature || 0.5)
+  const temperature = config?.temperature || aiConfig?.temperature || 0.5
   const requestBody = {
     messages,
-    model: 'gpt-4',
+    model: config.default || 'gpt-4',
     temperature,
     top_p: 1,
     n: 1,
     stream: false,
+    max_tokens: config?.maxTokens || aiConfig?.maxTokens,
   }
   const headers = generateCopilotRequestHeader(app_token, false) as Record<string, string>
   if (headers === null)

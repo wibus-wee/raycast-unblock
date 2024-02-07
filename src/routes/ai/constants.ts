@@ -1,4 +1,4 @@
-const OPENAI_SERVICE_PROVIDERS = [
+export const OPENAI_SERVICE_PROVIDERS = [
   {
     id: 'openai-gpt-3.5-turbo',
     model: 'gpt-3.5-turbo',
@@ -8,18 +8,9 @@ const OPENAI_SERVICE_PROVIDERS = [
     requires_better_ai: true,
     features: ['chat', 'quick_ai', 'commands', 'api'],
   },
-  {
-    id: 'openai-gpt-4-1106-preview',
-    model: 'gpt-4-1106-preview',
-    name: 'GPT-4 Turbo',
-    provider: 'openai',
-    provider_name: 'OpenAI',
-    requires_better_ai: true,
-    features: ['chat', 'quick_ai', 'commands', 'api'],
-  },
 ]
 
-const GEMINI_SERVICE_PROVIDERS = [
+export const GEMINI_SERVICE_PROVIDERS = [
   {
     id: 'gemini-pro',
     model: 'gemini-pro',
@@ -31,22 +22,27 @@ const GEMINI_SERVICE_PROVIDERS = [
   },
 ]
 
-const GITHUB_COPILOT_SERVICE_PROVIDERS = [
-  {
-    id: 'github-copilot',
-    model: 'github-copilot',
-    name: 'GitHub Copilot',
-    provider: 'microsoft',
-    provider_name: 'Microsoft',
-    requires_better_ai: true,
-    features: ['chat', 'quick_ai', 'commands', 'api'],
-  },
-]
-
-export const RAYCAST_AI_SERVICE_PROVIDERS = [
-  ...OPENAI_SERVICE_PROVIDERS,
-  ...GEMINI_SERVICE_PROVIDERS,
-  ...GITHUB_COPILOT_SERVICE_PROVIDERS,
+export const GITHUB_COPILOT_3_5_TURBO = {
+  id: 'copilot-gpt-3.5-turbo',
+  model: 'gpt-3.5-turbo',
+  name: 'Copilot GPT-3.5 Turbo',
+  provider: 'github',
+  provider_name: 'GitHub',
+  requires_better_ai: true,
+  features: ['chat', 'quick_ai', 'commands', 'api'],
+}
+export const GITHUB_COPILOT_4 = {
+  id: 'copilot-gpt-4',
+  model: 'gpt-4',
+  name: 'Copilot GPT-4',
+  provider: 'github',
+  provider_name: 'GitHub',
+  requires_better_ai: true,
+  features: ['chat', 'quick_ai', 'commands', 'api'],
+}
+export const GITHUB_COPILOT_SERVICE_PROVIDERS = [
+  GITHUB_COPILOT_3_5_TURBO,
+  GITHUB_COPILOT_4,
 ]
 
 export const RAYCAST_DEFAULT_MODELS = {
@@ -61,13 +57,6 @@ export const RAYCAST_GEMINI_PRO_ONLY_MODELS = {
   quick_ai: 'gemini-pro',
   commands: 'gemini-pro',
   api: 'gemini-pros',
-}
-
-export const RAYCAST_COPILOT_MODELS = {
-  chat: 'github-copilot',
-  quick_ai: 'github-copilot',
-  commands: 'github-coilot',
-  api: 'github-copilot',
 }
 
 export const OPENAI_OFFICIAL_ENDPOINT = 'https://api.openai.com/v1/chat/completions'

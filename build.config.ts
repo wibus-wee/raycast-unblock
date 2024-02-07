@@ -8,9 +8,9 @@ export default defineBuildConfig({
   clean: true,
   hooks: {
     'build:done': async () => {
-      const file = '.env'
+      const file = 'config.toml'
       if (fs.existsSync(file))
-        fs.copyFileSync(file, 'dist/.env')
+        fs.copyFileSync(file, 'dist/config.toml')
     },
   },
 })

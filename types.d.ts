@@ -1,10 +1,14 @@
-import type { EnvConfig } from './src/types'
-
 declare global {
   namespace NodeJS {
-    interface ProcessEnv extends EnvConfig {
+    interface ProcessEnv {
       users: string
-      NODE_ENV: 'development' | 'production'
+      config: string
+      // LegacyAIConfig
+      AI_TYPE?: string
+      AI_API_KEY?: string
+      OPENAI_BASE_URL?: string
+      AI_MAX_TOKENS?: string
+      AI_TEMPERATURE?: string
     }
   }
 }

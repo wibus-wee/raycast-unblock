@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import packageJson from '../package.json'
 import { prepareSync } from './features/sync/pre'
 import { launch } from './launch'
-import { checkAIConfig, injectEnv } from './utils/env.util'
+import { injectEnv } from './utils/env.util'
 import { DATA, TMP } from './constants'
 import { prepareShortcutRunner } from './utils/shortcuts.util'
 import { prepareCache, registCache } from './utils/cache.util'
@@ -56,6 +56,3 @@ Promise.all([
 ]).then(() => {
   Debug.success('Cache Registration is done.')
 })
-
-checkAIConfig()
-Debug.info('Translate Type:', process.env.TRANSLATE_TYPE)

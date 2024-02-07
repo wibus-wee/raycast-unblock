@@ -11,3 +11,4 @@ node_modules
 temp
 .env
 sea-prep.blob
+config.toml

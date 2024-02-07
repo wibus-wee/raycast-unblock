@@ -1,0 +1,99 @@
+[General]
+# If you deploy this service on a remote server,
+# it is recommended to set mode to "remote", maybe one day this program will be used
+# and you **should** set host to "0.0.0.0", or you can't access the service from the outside
+mode = "local"
+port = 3000
+host = "0.0.0.0"
+# If there are some problems, you can set debug & logger to true
+debug = false
+# Fastify Logger
+logger = false
+
+[AI]
+default = "copilot"
+# If the parameter is not set in the specific AI service,
+# this value will be used
+# For example:
+#    If I don't set the temperature parameter in AI.OpenAI, this value will be used
+#    But if I set the temperature parameter in AI.Copilot, the temperature parameter in AI.Copilot will be used
+temperature = 0.5
+max_tokens = 100
+
+[AI.OpenAI]
+# If the default model is not set,
+# or...
+# if the default model is set,
+# but the specific AI service's model is not set,
+# the default model written in the code will be used
+# default = "gpt-3.5-turbo-16k.legacy"
+# You can edit the base_url if you want to use the custom OpenAI server
+# base_url = "https://api.openai.com"
+api_key = "YOUR_API_KEY"
+# If the parameter is set in the specific AI service
+# this value will be used, and it has the highest priority
+temperature = 0.5
+max_tokens = 100
+
+# Custom OpenAI Model
+# You can add your own OpenAI model just like the following:
+# # [NOTICE] You shouldn't use the dot in the model name. It will be parsed as a section
+[AI.OpenAI.Models.gpt-3_5-turbo-16k-legacy]
+id = "gpt-3.5-turbo-16k.legacy" # if it's not provided, it will be generated from the Object key. For example, here it will be "gpt-3.5-turbo-16k-legacy"
+model = "gpt-3.5-turbo-16k.legacy" # if it's not provided, it will be generated from the Object key.
+name = "Legacy GPT-3.5 Turbo" # if it's not provided, it will be generated from the Object key.
+
+[AI.Gemini]
+api_key = ""
+temperature = 0.5
+max_tokens = 100
+
+[AI.Copilot]
+# You can choose the model from the following: gpt-3.5-turbo, gpt-4
+default = "gpt-4"
+api_key = ""
+temperature = 0.5
+max_tokens = 100
+
+[Translate]
+# You can choose the default translation service from the following:
+# shortcut, deeplx, ai, libretranslate
+# Default: deeplx
+default = "deeplx"
+
+# Maybe one day there will be a [Translate.Shortcuts] configuration here...
+# [Translate.Shortcuts]
+
+[Translate.DeepLX]
+# proxy_endpoint = ""
+# access_token = ""
+
+[Translate.AI]
+# If the default model is not set,
+# or...
+# if the default model is set,
+# but the specific AI service's model is not set,
+# the default model written in the code will be used
+# Default: openai
+default = "openai"
+
+[Translate.LibreTranslate]
+base_url = "https://libretranslate.com"
+# You can choose the type from the following:
+# reserve, api
+# Default: reserve
+type = "reserve"
+# If you choose api, you should set the api_key
+api_key = ""
+# The following is for the legacy configuration
+# They will be removed in the future
+
+# They are for the legacy configuration
+# YOU SHOULD NOT USE THEM
+# THEY WILL CAUSE WARNING IN LOGS
+# [Legacy]
+# ai_type = "OpenAI"
+# ai_api_key = ""
+# openai_base_url = "https://api.openai.com"
+# ai_max_tokens = 100
+# ai_temperature = 0.5

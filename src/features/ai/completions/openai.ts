@@ -1,31 +1,20 @@
 import OpenAI from 'openai'
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import { getAIConfig } from '../../../utils/env.util'
+import { getConfig } from '../../../utils/env.util'
+import type { RaycastCompletions } from '../../../types/raycast/completions'
 
 export async function OpenAIChatCompletion(request: FastifyRequest, reply: FastifyReply) {
+  const aiConfig = getConfig('ai')
+  const openaiConfig = getConfig('ai')?.openai
   const openai = new OpenAI({
-    baseURL: getAIConfig().type === 'custom' ? getAIConfig().endpoint : undefined,
-    apiKey: getAIConfig().key,
+    baseURL: openaiConfig?.baseUrl,
+    apiKey: openaiConfig?.apiKey,
   })
 
-  const body = request.body as {
-    additional_system_instructions: string
-    model: string
-    temperature: number
-    messages: {
-      content: {
-        system_instructions: string
-        command_instructions: string
-        text: string
-        temperature: number
-        [key: string]: string | number
-      }
-      author: 'user' | 'assistant'
-    }[]
-  }
+  const body = request.body as RaycastCompletions
 
   const openai_message = []
-  let temperature = Number(getAIConfig().temperature || 0.5)
+  let temperature = openaiConfig?.temperature || aiConfig?.temperature || 0.5
   const messages = body.messages
   for (const message of messages) {
     if ('system_instructions' in message.content) {
@@ -74,7 +63,7 @@ export async function OpenAIChatCompletion(request: FastifyRequest, reply: Fasti
     temperature,
     stop: null,
     n: 1,
-    max_tokens: getAIConfig().max_tokens ? Number(getAIConfig().max_tokens) : undefined,
+    max_tokens: openaiConfig?.maxTokens || aiConfig?.maxTokens,
   }).catch((err) => {
     throw new Error(`[AI] OpenAI Chat Completions Failed: ${err}`)
   })

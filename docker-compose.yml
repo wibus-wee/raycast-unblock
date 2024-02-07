@@ -4,8 +4,8 @@ services:
   app:
     container_name: raycast-unblock
     # ## You can also add arguments to the command line here, such as the following
-    # ## If you need to use .env file, please uncomment the following line ####
-    command: --env=./config/.env
+    # ## If you need to use config.toml file, please uncomment the following line ####
+    command: --config=./config/config.toml
     image: wibuswee/raycast-unblock:latest
     environment:
       - TZ=Asia/Shanghai
@@ -13,7 +13,7 @@ services:
       - HOST=0.0.0.0
       # - AI_API_KEY=your_api_key
       # - TRANSLATE_TYPE=ai
-    # ## If you need to use .env file, please uncomment the following line ####
+    # ## If you need to use config.toml file, please uncomment the following line ####
     volumes:
       - ./configs/raycast-unblock:/app/config
     ports:

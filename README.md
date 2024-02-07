@@ -14,10 +14,8 @@ Unblock all features in Raycast Pro Plan.
 ## Quick Start
 
 ```bash
-docker run -d --name raycast-unblock -p 3000:3000 wibuswee/raycast-unblock:latest --ai_key=your-open-ai-key --openai_base_url=https://api.openai.com --ai_type=openai --host=0.0.0.0
+docker run -d --name raycast-unblock -p 3000:3000 wibuswee/raycast-unblock:latest
 ```
-
-> Replace `your-open-ai-key` with your OpenAI API key.
 
 More details can be found in [Usage](#usage).
 
@@ -77,24 +75,11 @@ You can use Docker to run Raycast Unblock.
 docker run -d \
   --name raycast-unblock \
   -p 3000:3000 \
-  --env /path/to/your/.env:/app/.env \
+  --config /path/to/your/config.toml:/app/config.toml \
   wibuswee/raycast-unblock:latest
 ```
 
-You should replace `/path/to/your/.env` with your `.env` file path. Or directly use parameter settings to set variables:
-
-Change the environment variables in the `.env.example` file to trailing parameters and pass them to the `docker run` command. For example:
-
-```bash
-docker run -d \
-  --name raycast-unblock \
-  -p 3000:3000 \
-  --ai_type=openai \
-  --openai_base_url=https://api.openai.com \
-  --ai_key=your-open-ai-key \
-  --host=0.0.0.0
-  wibuswee/raycast-unblock:latest
-```
+You should replace `/path/to/your/config.toml` with your `config.toml` file path.
 
 ### Docker Compose
 
@@ -106,7 +91,7 @@ Download the [docker-compose.yml](./docker-compose.yml) file and modify the envi
 docker-compose up -d
 ```
 
-If you need to use .env file, please uncomment some lines in the `docker-compose.yml` file (They are commented out by default).
+If you need to use config.toml file, please uncomment some lines in the `docker-compose.yml` file (They are commented out by default).
 
 ### Download dist from actions
 
@@ -119,15 +104,17 @@ The naming format is `raycast-unblock-<platform>-<type>`.
 
 ### Set environment variables
 
-Copy / Download the `.env.example` file and rename it to `.env`, then fill in the environment variables.
+Copy / Download the `config.example.toml` file and rename it to `config.toml`, then fill in the environment variables.
 
-After that, you should put the `.env` file in the same directory as the executable file.
+After that, you should put the `config.toml file in the same directory as the executable file.
 
 ### Run
 
 ```bash
-# Your .env file should be in this directory
+# Your config.toml file should be in this directory, or you should set the `--config` parameter
 node index.js # or ./raycast-unblock-app
+# or
+node index.js --config /path/to/your/config.toml
 
 # ℹ Raycast Unblock
 # ℹ Version: 0.0.0
@@ -141,7 +128,7 @@ If you want to run it in the background, you can use `pm2` or `nohup`.
 
 > [!NOTE]
 >
-> If you modified the `PORT` in the `.env` file, you should modify activator script to make it work properly
+> If you modified the `general.port` in the `config.toml` file, you should modify activator script to make it work properly
 >
 > ```diff
 > - "http://127.0.0.1:3000"
@@ -186,7 +173,7 @@ backend.raycast.com <Your Backend IP>
 # backend.raycast.com 127.0.0.1
 ```
 
-But this method is required to modify the port of the backend to `80`. You should modify the `.env` file and set `PORT` to `80`.
+But this method is required to modify the port of the backend to `80`. You should modify the `config.toml` file and set `general.port` to `80`.
 
 > [!NOTE]
 > If you are building the backend locally, please do not let your proxy tool proxy both Raycast's requests and the backend service's requests, as this will cause it to not work properly.
@@ -219,7 +206,7 @@ You can use `pm2` to manage the process. You can run `npm install -g pm2` to ins
 For example:
 
 ```bash
-# Your .env file should be in this directory
+# Your config.toml file should be in this directory, or you should set the `--config` parameter
 pm2 start index.mjs --name raycast-unblock
 pm2 start ./raycast-unblock-app --name raycast-unblock
 ```
@@ -246,7 +233,7 @@ Raycast Unblock provides a GitHub Copilot service, which can be used in Raycast 
 Or you can use [aaamoon/copilot-gpt4-service](htts://github.com/aaamoon/copilot-gpt4-service) to convert GitHub Copilot to OpenAI GPT API format, and you can use it to use GitHub Copilot.
 
 > [!NOTE]
-> You should set `AI_TYPE` to `openai` or `custom` in the `.env` file, and set `OPENAI_BASE_URL` to the address of the `copilot-gpt4-service` service.
+> You should set `AI.default` to `openai` in the `config.toml` file, and set `AI.OpenAI.baseUrl` to the address of the `copilot-gpt4-service` service.
 
 ### Shortcut Translator
 
@@ -255,7 +242,7 @@ Raycast Unblock provides a shortcut translator, which is only available on macOS
 #### Usage
 
 1. Open [iCloud Shortcut - RaycastUnblock.Translate.v1](https://www.icloud.com/shortcuts/4a907702fe3145d9a378a9c8af47bb2e) and add it to your shortcuts.
-2. Modify your `.env` file and set `TRANSLATE_TYPE` to `shortcut`.
+2. Modify your `config.toml` file and set `Translate.type` to `shortcut`.
 3. Run Raycast Unblock and use Raycast Translate feature.
 
 #### Notice

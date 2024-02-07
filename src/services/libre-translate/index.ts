@@ -1,4 +1,3 @@
-import process from 'node:process'
 import { ofetch } from 'ofetch'
 import { v4 } from 'uuid'
 
@@ -9,6 +8,7 @@ export async function FetchLibreTranslateAPI(
   source: string,
   target: string,
   api_key?: string,
+  api_endpoint?: string,
   secret?: string,
   headers?: Record<string, string>,
 ): Promise<{
@@ -30,7 +30,7 @@ export async function FetchLibreTranslateAPI(
   const form_data_str = `${Object.entries(form_data).map(([key, value]) =>
     `--${boundary}\r\nContent-Disposition: form-data; name="${key}"\r\n\r\n${value}\r\n`,
   ).join('')}--${boundary}--\r\n`
-  const api = process.env.LIBRE_TRANSLATE_ENDPOINT ? `${process.env.LIBRE_TRANSLATE_ENDPOINT}/translate` : LibreTranslateAPI
+  const api = api_endpoint ? `${api_endpoint}/translate` : LibreTranslateAPI
   const res = await ofetch(api, {
     method: 'POST',
     headers: {

@@ -32,7 +32,7 @@ export async function TranslateWithLibreTranslateReverseAPI(
   translatedText: string
 }> {
   const session = v4()
-  const res = await FetchLibreTranslateAPI(text, source, target, '', await getApiSecret(), {
+  const res = await FetchLibreTranslateAPI(text, source, target, '', await getApiSecret(), undefined, {
     'Cookie': `session=${session}`,
     'Origin': 'https://libretranslate.com',
     'Referer': `https://libretranslate.com/?source=${source}&target=${target}&q=${text}`,

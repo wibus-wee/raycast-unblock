@@ -8,11 +8,13 @@ import { httpClient } from './utils'
 import { AIRoute } from './routes/ai'
 import { TranslationsRoute } from './routes/translations'
 import { Debug } from './utils/log.util'
+import { getConfig } from './utils/env.util'
 
 const prefix = '/api/v1'
 
 export function launch() {
-  const fastify = Fastify({ logger: process.env.DEBUG })
+  const config = getConfig('general')
+  const fastify = Fastify({ logger: config?.logger || false })
   fastify.register(FastifySSEPlugin)
 
   fastify.register(MeRoute, { prefix: `${prefix}/me` })
@@ -50,7 +52,7 @@ export function launch() {
   consola.info(`Raycast Unblock`)
   consola.info(`Version: ${packageJson.version}`)
   consola.info('Server starting...')
-  fastify.listen({ port: (process.env.PORT ? Number(process.env.PORT) : 3000), host: (process.env.HOST || '127.0.0.1') }, (err, address) => {
+  fastify.listen({ port: config?.port || 3000, host: config?.host || '0.0.0.0' }, (err, address) => {
     if (err) {
       consola.error(err)
       process.exit(1)

@@ -48,11 +48,11 @@
     "@ifyour/deeplx": "^0.1.17",
     "consola": "^3.2.3",
     "destr": "^2.0.2",
-    "dotenv": "^16.4.1",
     "fastify": "^4.26.0",
     "fastify-sse-v2": "^3.1.2",
     "ofetch": "^1.3.3",
     "openai": "^4.26.0",
+    "toml": "^3.0.0",
     "uuid": "^9.0.1",
     "zx": "^7.2.3"
   },

@@ -1,7 +1,6 @@
-import type process from 'node:process'
 import { TRANSLATE_DICT_REVERSE } from './dict'
 
-export function generateTranslationsPrompts(targetLang: string, text: string, type: typeof process.env.AI_TYPE) {
+export function generateTranslationsPrompts(targetLang: string, text: string, type: string) {
   let res: any
   const prompts = [
     {

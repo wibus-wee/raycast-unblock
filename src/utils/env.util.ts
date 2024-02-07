@@ -1,51 +1,80 @@
+import fs from 'node:fs'
 import process from 'node:process'
 import consola from 'consola'
-import dotenv from 'dotenv'
 import { argv } from 'zx'
-import { type AIConfig, KeyOfEnvConfig } from '../types'
+import { parse } from 'toml'
+import destr from 'destr'
+import type { Config } from '../types/config'
 import { Debug } from './log.util'
+import { matchKeyInObject, toCamelCaseInObject, tolowerCaseInObject, transformToString } from './others.util'
+
+/**
+ * Check the default OpenAI model configuration.
+ *
+ * It may be configured to a non-existent model, in this case, it needs to be removed
+ */
+function checkOpenAIDefaultModelConfig(env: Config) {
+  if (env.ai?.openai?.default?.toLowerCase() && !(env.ai.openai.models as any)[env.ai.openai.default?.toLowerCase()]) {
+    consola.warn(`The default AI model [${env.ai.openai.default?.toLowerCase()}] is not available, it will be removed from the config`)
+    // delete env.ai.openai.default
+    if (env.ai.openai.default)
+      delete env.ai.openai.default
+  }
+  return env
+}
+
+function checkAIDefaultConfig(env: Config) {
+  if (env.ai?.default?.toLowerCase() && !(env.ai as any)[env.ai.default?.toLowerCase()]) {
+    consola.warn(`The default AI setting [${env.ai.default?.toLowerCase()}] is not available, use the default setting`)
+    env.ai.default = 'openai'
+  }
+  return env
+}
+
+function checkTranslateAIDefaultConfig(env: Config) {
+  if (env.translate?.ai?.default?.toLowerCase() && !(env.ai as any)[env.translate.ai.default]) {
+    consola.warn(`The default AI model [${env.translate.ai.default}] is not available, it will be removed from the config`)
+    delete env.translate.ai.default
+  }
+  return env
+}
+
+function checkDefault(env: Config) {
+  env = checkOpenAIDefaultModelConfig(env)
+  env = checkAIDefaultConfig(env)
+  env = checkTranslateAIDefaultConfig(env)
+  return env
+}
 
 export function injectEnv() {
-  if (argv.help) {
-    consola.log('Available options:')
-    KeyOfEnvConfig.forEach((key) => {
-      consola.log(`  --${key.toLowerCase()} <value>`)
-    })
-    process.exit(0)
-  }
-  let envPath = '.env'
-  if (argv.env || argv.ENV || process.env.ENV)
-    envPath = argv.env || argv.ENV || process.env.ENV
-  const env = dotenv.config({
-    path: envPath,
-  })
-  // Override env from argv
-  KeyOfEnvConfig.forEach((key) => {
-    const argvKey = key.toLowerCase()
-    if (argv[argvKey] || argv[key])
-      (process.env[key] as any) = argv[argvKey]
-  })
-  Debug.info('Argv:', argv)
-  Debug.info('Env path:', envPath)
-  Debug.info('Parsed env:')
-  if (process.env.DEBUG)
-    // eslint-disable-next-line no-console
-    console.log(env.parsed)
-}
+  if (matchKeyInObject(argv, 'env') || process.env.ENV || process.env.env)
+    consola.warn('You are using deprecated flag [--env]. It can\'t be used in this version anymore. Please use the new config format.')
 
-export function getAIConfig(): AIConfig {
-  return {
-    type: (process.env.AI_TYPE || 'openai') as AIConfig['type'],
-    key: process.env.AI_API_KEY || '',
-    endpoint: process.env.OPENAI_BASE_URL,
-    max_tokens: process.env.AI_MAX_TOKENS,
-    temperature: process.env.AI_TEMPERATURE || '0.5',
+  const config = matchKeyInObject(argv, 'config') || 'config.toml'
+  if (fs.existsSync(config)) {
+    let env = parse(fs.readFileSync(config, 'utf-8')) as Config
+    env = tolowerCaseInObject(env)
+    env = toCamelCaseInObject(env)
+    env = checkDefault(env)
+    process.env.config = JSON.stringify(env)
+    Debug.native.log(env)
+    if (env.legacy) {
+      for (const key in env.legacy) {
+        consola.warn(`[DEPRECATED] You are using deprecated config key [${key.toUpperCase()}]. It can't be used in this version anymore. Please use the new config format.`)
+        process.env[key.toUpperCase()] = transformToString((env.legacy as any)[key])
+      }
+      consola.warn('Please use the new config format. Check the documentation for more information: https://github.com/wibus-wee/raycast-unblock#readme')
+    }
   }
 }
 
-export function checkAIConfig() {
-  const config = getAIConfig()
-  Debug.info('Your AI will be using [', config.type, '] API')
-  if (!config.key)
-    consola.warn('AI_API_KEY is not set')
+export function getConfig<T extends keyof Config>(key?: T): Config[T] {
+  const env = process.env.config
+  if (env) {
+    const config = destr<Config>(env)
+    if (key)
+      return config[key]
+    return config as Config[T]
+  }
+  return {} as Config[T]
 }
