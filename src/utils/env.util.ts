@@ -53,20 +53,3 @@ export function getConfig<T extends keyof Config>(key?: T): Config[T] {
   }
   return {} as Config[T]
 }
-
-export function getAIConfig(): LegacyAIConfig {
-  return {
-    type: (process.env.AI_TYPE || 'openai') as LegacyAIConfig['type'],
-    key: process.env.AI_API_KEY || '',
-    endpoint: process.env.OPENAI_BASE_URL,
-    max_tokens: process.env.AI_MAX_TOKENS,
-    temperature: process.env.AI_TEMPERATURE || '0.5',
-  }
-}
-
-export function checkAIConfig() {
-  const config = getAIConfig()
-  Debug.info('Your AI will be using [', config.type, '] API')
-  if (!config.key)
-    consola.warn('AI_API_KEY is not set')
-}

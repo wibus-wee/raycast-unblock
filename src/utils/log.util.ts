@@ -1,6 +1,7 @@
 import process from 'node:process'
 import { Console } from 'node:console'
 import consola from 'consola'
+import { getConfig } from './env.util'
 
 declare global {
   interface Console {
@@ -14,31 +15,31 @@ Console.prototype.success = function (message: any, ...args: any[]) {
 
 function DebugInfo(mode: 'consola' | 'native', message: any, ...args: any[]) {
   const module = mode === 'native' ? console : consola
-  if (process.env.DEBUG)
+  if (process.env.DEBUG || getConfig('general')?.debug)
     return module.info(`[DEBUG]`, message, ...args)
 }
 
 function DebugSuccess(mode: 'consola' | 'native', message: any, ...args: any[]) {
   const module = mode === 'native' ? console : consola
-  if (process.env.DEBUG)
+  if (process.env.DEBUG || getConfig('general')?.debug)
     return module.success(`[DEBUG]`, message, ...args)
 }
 
 function DebugWarn(mode: 'consola' | 'native', message: any, ...args: any[]) {
   const module = mode === 'native' ? console : consola
-  if (process.env.DEBUG)
+  if (process.env.DEBUG || getConfig('general')?.debug)
     return module.warn(`[DEBUG]`, message, ...args)
 }
 
 function DebugError(mode: 'consola' | 'native', message: any, ...args: any[]) {
   const module = mode === 'native' ? console : consola
-  if (process.env.DEBUG)
+  if (process.env.DEBUG || getConfig('general')?.debug)
     return module.error(`[DEBUG]`, message, ...args)
 }
 
 function DebugLog(mode: 'consola' | 'native', message: any, ...args: any[]) {
   const module = mode === 'native' ? console : consola
-  if (process.env.DEBUG)
+  if (process.env.DEBUG || getConfig('general')?.debug)
     return module.log(message, ...args)
 }
 

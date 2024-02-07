@@ -3,4 +3,5 @@ export interface GeneralConfig {
   port?: number
   host?: string
   debug?: boolean
+  logger?: boolean
 }

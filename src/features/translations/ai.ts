@@ -1,6 +1,6 @@
 import type { FastifyRequest } from 'fastify'
 import { GeminiGenerateContent } from '../ai/generate/gemini'
-import { getAIConfig, getConfig } from '../../utils/env.util'
+import { getConfig } from '../../utils/env.util'
 import { OpenaiGenerateContent } from '../ai/generate/openai'
 import { CopilotGenerateContent } from '../ai/generate/copilot'
 import type { TranslateFrom, TranslateTo } from '../../types/raycast/translate'

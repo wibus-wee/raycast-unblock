@@ -1,6 +1,6 @@
 import consola from 'consola'
 import { generateCopilotRequestHeader, getAuthFromToken } from '../../../services/copilot'
-import { getAIConfig, getConfig } from '../../../utils/env.util'
+import { getConfig } from '../../../utils/env.util'
 import { copilotClient } from '../../../utils'
 import type { AIGenerateContent } from '../../../types/internal/ai-generate-content'
 
