@@ -7,7 +7,7 @@ export interface AIConfig {
   copilot?: CopilotServiceConfig
 }
 export interface AIServiceConfig {
-  enable?: boolean
+  disable?: boolean
   apiKey?: string
   maxTokens?: number
   temperature?: number
@@ -17,14 +17,16 @@ export interface OpenAIServiceConfig extends AIServiceConfig {
   models?: AIServiceModelsConfig
 }
 export interface GeminiServiceConfig extends AIServiceConfig {}
-export interface CopilotServiceConfig extends AIServiceConfig {}
+export interface CopilotServiceConfig extends AIServiceConfig {
+  default: 'gpt-3.5-turbo' | 'gpt-4'
+}
 
 export interface AIServiceModelsConfig {
   [key: string]: {
+    isDefault?: boolean
     id?: string
     model: string
     name?: string
-    features?: string[]
     provider?: string
     provider_name?: string
   }
