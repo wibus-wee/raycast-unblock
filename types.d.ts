@@ -1,5 +1,3 @@
-import type { Config } from './src/types/config/index'
-
 declare global {
   namespace NodeJS {
     interface ProcessEnv {
