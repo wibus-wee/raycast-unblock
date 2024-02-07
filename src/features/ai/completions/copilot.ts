@@ -27,22 +27,15 @@ export async function CopilotChatCompletion(request: FastifyRequest, reply: Fast
   const app_token = getAIConfig().key
   if (!app_token) {
     consola.error(`[Copilot] Auth error: Missing token`)
-    return reply.status(401).send({ message: 'Unauthorized. Missing token' })
+    throw new Error('Unauthorized. Missing token')
   }
+
   try {
-    const _ = await getAuthFromToken(app_token)
-      .then((_) => {
-        consola.success(`[Copilot] Auth success.`)
-        return _
-      })
-      .catch((e: any) => {
-        consola.error(`[Copilot] Auth error: ${e.message}.`)
-        return reply.status(401).send({ message: 'Unauthorized. Invalid token' })
-      })
+    await getAuthFromToken(app_token)
   }
   catch (e: any) {
     consola.error(`[Copilot] Auth error: ${e.message}.`)
-    return reply.status(401).send({ message: 'Unauthorized. Invalid token' })
+    throw new Error(`Unauthorized. Invalid token. ${e.message}`)
   }
 
   let temperature = Number(getAIConfig().temperature || 0.5)
@@ -97,17 +90,18 @@ export async function CopilotChatCompletion(request: FastifyRequest, reply: Fast
       temperature = message.content.temperature
   }
 
-  const res = await copilotClient.native(`https://api.githubcopilot.com${completions}`, {
+  const res = await copilotClient(completions, {
     method: 'POST',
     headers,
     body: JSON.stringify(requestBody),
   })
     .catch((e: any) => {
       consola.error(`[Copilot] Request error: ${e.message}.`)
-      return null
+      throw new Error(`Request error: ${e.message}`)
     })
-  if (!res?.ok)
-    return reply.status(500).send({ message: 'Internal server error' })
+
+  if (res instanceof Error)
+    throw new Error(`[Copilot] Request error: ${res.message}`)
 
   const stream = processStream(res).stream as any
 

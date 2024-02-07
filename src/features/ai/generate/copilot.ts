@@ -30,11 +30,11 @@ export async function CopilotGenerateContent(prompt: {
     throw new Error('Unauthorized. Missing token')
   }
   try {
-    const _ = await getAuthFromToken(app_token)
+    await getAuthFromToken(app_token)
   }
   catch (e: any) {
     consola.error(`[Copilot] Auth error: ${e.message}.`)
-    throw new Error('Unauthorized. Invalid token')
+    throw new Error(`Unauthorized. Invalid token. ${e.message}`)
   }
 
   const temperature = Number(getAIConfig().temperature || 0.5)
@@ -47,6 +47,8 @@ export async function CopilotGenerateContent(prompt: {
     stream: false,
   }
   const headers = generateCopilotRequestHeader(app_token, false) as Record<string, string>
+  if (headers === null)
+    throw new Error('[Copilot] Request error: Could not generate request headers.')
 
   const result = await copilotClient(completions, {
     method: 'POST',
@@ -54,8 +56,11 @@ export async function CopilotGenerateContent(prompt: {
     body: JSON.stringify(requestBody),
   }).catch((e: any) => {
     consola.error(`[Copilot] Request error: ${e.message}.`)
-    return null
+    throw new Error(`Request error: ${e.message}`)
   })
+
+  if (result instanceof Error)
+    throw new Error(`[Copilot] Request error: ${result.message}`)
 
   const text = result.choices[0].message.content
   const split = text.split('\n')

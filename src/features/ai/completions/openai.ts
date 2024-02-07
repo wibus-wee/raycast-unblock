@@ -75,7 +75,12 @@ export async function OpenAIChatCompletion(request: FastifyRequest, reply: Fasti
     stop: null,
     n: 1,
     max_tokens: getAIConfig().max_tokens ? Number(getAIConfig().max_tokens) : undefined,
+  }).catch((err) => {
+    throw new Error(`[AI] OpenAI Chat Completions Failed: ${err}`)
   })
+
+  if (stream instanceof Error)
+    throw new Error(`[AI] OpenAI Chat Completions Failed: ${stream}`)
 
   return reply.sse((async function * source() {
     try {

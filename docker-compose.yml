@@ -5,7 +5,7 @@ services:
     container_name: raycast-unblock
     # ## You can also add arguments to the command line here, such as the following
     # ## If you need to use .env file, please uncomment the following line ####
-    # command: --env=./config/.env
+    command: --env=./config/.env
     image: wibuswee/raycast-unblock:latest
     environment:
       - TZ=Asia/Shanghai

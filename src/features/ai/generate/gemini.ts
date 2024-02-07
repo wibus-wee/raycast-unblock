@@ -12,8 +12,12 @@ export async function GeminiGenerateContent(msg: string): Promise<AIGenerateCont
     maxOutputTokens: getAIConfig().max_tokens ? Number(getAIConfig().max_tokens) : undefined,
     temperature: Number(getAIConfig().temperature),
   }
-  const result = await model.generateContent(msg)
-  const response = await result.response
+  const result = await model.generateContent(msg).catch((err) => {
+    throw new Error(`[AI] Gemini Chat Completions Failed: ${err}`)
+  })
+  if (result instanceof Error)
+    throw new Error(`[AI] Gemini Chat Completions Failed: ${result}`)
+  const response = result.response
   const text = response.text()
   return {
     content: text,

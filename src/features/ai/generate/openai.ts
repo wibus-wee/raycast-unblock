@@ -32,7 +32,12 @@ export async function OpenaiGenerateContent(prompt: {
     n: 1,
     max_tokens: getAIConfig().max_tokens ? Number(getAIConfig().max_tokens) : undefined,
     model: 'gpt-3.5-turbo',
+  }).catch((err) => {
+    throw new Error(`[AI] OpenAI Chat Completions Failed: ${err}`)
   })
+
+  if (result instanceof Error)
+    throw new Error(`[AI] OpenAI Chat Completions Failed: ${result}`)
 
   const text = result.choices[0].message.content!
   const split = text.split('\n')

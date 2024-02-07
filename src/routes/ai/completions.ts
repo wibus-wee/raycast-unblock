@@ -1,6 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import { getAIConfig } from '../../utils/env.util'
-import { GeminiChatCompletion } from '../../features/ai/completions'
+import { GeminiChatCompletion } from '../../features/ai/completions/gemini'
 import { OpenAIChatCompletion } from '../../features/ai/completions/openai'
 import { CopilotChatCompletion } from '../../features/ai/completions/copilot'
 

@@ -74,7 +74,12 @@ export async function GeminiChatCompletion(request: FastifyRequest, reply: Fasti
       },
     ],
   })
-  const result = await chat.sendMessageStream(msg)
+  const result = await chat.sendMessageStream(msg).catch((err) => {
+    throw new Error(`[AI] Gemini Chat Completions Failed: ${err}`)
+  })
+  if (result instanceof Error)
+    throw new Error(`[AI] Gemini Chat Completions Failed: ${result}`)
+
   return reply.sse((async function * source() {
     try {
       for await (const data of result.stream) {
