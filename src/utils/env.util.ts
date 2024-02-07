@@ -9,6 +9,19 @@ import type { Config } from '../types/config'
 import { Debug } from './log.util'
 import { matchKeyInObject, tolowerCaseInObject, transformToString } from './others.util'
 
+/**
+ * Check the default OpenAI model configuration.
+ *
+ * It may be configured to a non-existent model, in this case, it needs to be removed
+ */
+function checkOpenAIDefaultModelConfig(env: Config) {
+  if (env.ai?.default && !(env.ai as any)[env.ai.default]) {
+    consola.warn(`The default AI model [${env.ai.default}] is not available, it will be removed from the config`)
+    delete env.ai.default
+  }
+  return env
+}
+
 export function injectEnv() {
   if (matchKeyInObject(argv, 'env') || process.env.ENV || process.env.env)
     consola.warn('You are using deprecated flag [--env]. It can\'t be used in this version anymore. Please use the new config format.')
@@ -17,6 +30,7 @@ export function injectEnv() {
   if (fs.existsSync(config)) {
     let env = parse(fs.readFileSync(config, 'utf-8')) as Config
     env = tolowerCaseInObject(env)
+    env = checkOpenAIDefaultModelConfig(env)
     process.env.config = JSON.stringify(env)
     Debug.native.log(env)
     if (env.legacy) {
