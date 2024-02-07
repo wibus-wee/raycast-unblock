@@ -3,7 +3,7 @@ import process from 'node:process'
 import consola from 'consola'
 import { argv } from 'zx'
 import { parse } from 'toml'
-import type { LegencyAIConfig } from '../types'
+import type { LegacyAIConfig } from '../types'
 import { Debug } from './log.util'
 import { matchKeyInObject } from './others.util'
 
@@ -14,9 +14,9 @@ export function injectEnv() {
   }
 }
 
-export function getAIConfig(): LegencyAIConfig {
+export function getAIConfig(): LegacyAIConfig {
   return {
-    type: (process.env.AI_TYPE || 'openai') as LegencyAIConfig['type'],
+    type: (process.env.AI_TYPE || 'openai') as LegacyAIConfig['type'],
     key: process.env.AI_API_KEY || '',
     endpoint: process.env.OPENAI_BASE_URL,
     max_tokens: process.env.AI_MAX_TOKENS,

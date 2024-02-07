@@ -3,7 +3,7 @@ export interface User {
   token: string
 }
 
-export interface LegencyAIConfig {
+export interface LegacyAIConfig {
   type?: 'openai' | 'gemini' | 'custom' | 'copilot'
   key?: string
   endpoint?: string
