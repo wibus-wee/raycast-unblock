@@ -4,7 +4,7 @@ import { GEMINI_SERVICE_PROVIDERS, GITHUB_COPILOT_3_5_TURBO, GITHUB_COPILOT_4, G
 function generateRaycastAIServiceProviders() {
   const config = getConfig('ai')
   const default_models = []
-  if (!config?.openai?.disable) {
+  if (config?.openai && !config?.openai?.disable) {
     default_models.push([
       ...OPENAI_SERVICE_PROVIDERS,
       ...Object.entries(getConfig('ai')?.openai?.models || {}).map(([key, value]) => ({
@@ -18,9 +18,9 @@ function generateRaycastAIServiceProviders() {
       })),
     ])
   }
-  if (!config?.gemini?.disable)
+  if (config?.gemini && !config?.gemini?.disable)
     default_models.push(GEMINI_SERVICE_PROVIDERS)
-  if (!config?.copilot?.disable)
+  if (config?.copilot && !config?.copilot?.disable)
     default_models.push(GITHUB_COPILOT_SERVICE_PROVIDERS)
   return default_models.flat()
 }
