@@ -6,11 +6,6 @@ import type { RaycastCompletions } from '../../../types/raycast/completions'
 export async function GeminiChatCompletion(request: FastifyRequest, reply: FastifyReply) {
   const aiConfig = getConfig('ai')
   const config = getConfig('ai')?.gemini
-  if (!config?.enable) {
-    reply.status(400).send({
-      error: 'Completions not supported for this model. Please check your config.',
-    })
-  }
   const genAI = new GoogleGenerativeAI(config?.apiKey || '')
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
 
