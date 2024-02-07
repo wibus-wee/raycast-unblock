@@ -4,7 +4,6 @@ import consola from 'consola'
 import { argv } from 'zx'
 import { parse } from 'toml'
 import destr from 'destr'
-import type { LegacyAIConfig } from '../types'
 import type { Config } from '../types/config'
 import { Debug } from './log.util'
 import { matchKeyInObject, toCamelCaseInObject, tolowerCaseInObject, transformToString } from './others.util'
@@ -15,10 +14,35 @@ import { matchKeyInObject, toCamelCaseInObject, tolowerCaseInObject, transformTo
  * It may be configured to a non-existent model, in this case, it needs to be removed
  */
 function checkOpenAIDefaultModelConfig(env: Config) {
-  if (env.ai?.default && !(env.ai as any)[env.ai.default]) {
-    consola.warn(`The default AI model [${env.ai.default}] is not available, it will be removed from the config`)
-    delete env.ai.default
+  if (env.ai?.openai?.default?.toLowerCase() && !(env.ai.openai.models as any)[env.ai.openai.default?.toLowerCase()]) {
+    consola.warn(`The default AI model [${env.ai.openai.default?.toLowerCase()}] is not available, it will be removed from the config`)
+    // delete env.ai.openai.default
+    if (env.ai.openai.default)
+      delete env.ai.openai.default
   }
+  return env
+}
+
+function checkAIDefaultConfig(env: Config) {
+  if (env.ai?.default?.toLowerCase() && !(env.ai as any)[env.ai.default?.toLowerCase()]) {
+    consola.warn(`The default AI setting [${env.ai.default?.toLowerCase()}] is not available, use the default setting`)
+    env.ai.default = 'openai'
+  }
+  return env
+}
+
+function checkTranslateAIDefaultConfig(env: Config) {
+  if (env.translate?.ai?.default?.toLowerCase() && !(env.ai as any)[env.translate.ai.default]) {
+    consola.warn(`The default AI model [${env.translate.ai.default}] is not available, it will be removed from the config`)
+    delete env.translate.ai.default
+  }
+  return env
+}
+
+function checkDefault(env: Config) {
+  env = checkOpenAIDefaultModelConfig(env)
+  env = checkAIDefaultConfig(env)
+  env = checkTranslateAIDefaultConfig(env)
   return env
 }
 
@@ -31,7 +55,7 @@ export function injectEnv() {
     let env = parse(fs.readFileSync(config, 'utf-8')) as Config
     env = tolowerCaseInObject(env)
     env = toCamelCaseInObject(env)
-    env = checkOpenAIDefaultModelConfig(env)
+    env = checkDefault(env)
     process.env.config = JSON.stringify(env)
     Debug.native.log(env)
     if (env.legacy) {
