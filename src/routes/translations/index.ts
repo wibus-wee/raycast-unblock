@@ -5,13 +5,15 @@ import { TranslateWithAI } from '../../features/translations/ai'
 import { Debug } from '../../utils/log.util'
 import { TranslateWithDeepLX } from '../../features/translations/deeplx'
 import { TranslateWithLibreTranslate } from '../../features/translations/libre-translate'
+import { getConfig } from '../../utils/env.util'
 
 export function TranslationsRoute(fastify: FastifyInstance, opts: Record<any, any>, done: Function) {
   fastify.post('/', async (request: FastifyRequest, reply: FastifyReply) => {
+    const config = getConfig('translate')
     Debug.info('[GET] /translations --> Local Handler')
     let res
-    Debug.info(`[GET] /translations --> Local Handler --> ${process.env.TRANSLATE_TYPE}`)
-    switch (process.env.TRANSLATE_TYPE) {
+    Debug.info(`[GET] /translations --> Local Handler --> ${config?.default || 'deeplx'}`)
+    switch (config?.default?.toLowerCase() || 'deeplx') {
       case 'shortcut':
         res = await TranslateWithShortcut(request)
         break
@@ -25,7 +27,7 @@ export function TranslationsRoute(fastify: FastifyInstance, opts: Record<any, an
         res = await TranslateWithLibreTranslate(request)
         break
       default:
-        res = await TranslateWithAI(request)
+        res = await TranslateWithDeepLX(request)
         break
     }
     Debug.info('[GET] /translations <-- Local Handler')
