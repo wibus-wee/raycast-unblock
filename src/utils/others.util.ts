@@ -30,3 +30,22 @@ export function tolowerCaseInObject<T = Record<any, any>>(obj: T) {
   })
   return newObj
 }
+
+export function toCamelCase(str: string) {
+  return str.replace(/([-_][a-z])/ig, ($1) => {
+    return $1.toUpperCase()
+      .replace('-', '')
+      .replace('_', '')
+  })
+}
+
+export function toCamelCaseInObject<T = Record<any, any>>(obj: T) {
+  const keys = Object.keys(obj || {})
+  const newObj = {} as T
+  keys.forEach((k) => {
+    (newObj as any)[toCamelCase(k)] = (obj as any)[k]
+    if (typeof (obj as any)[k] === 'object')
+      (newObj as any)[toCamelCase(k)] = toCamelCaseInObject((obj as any)[k])
+  })
+  return newObj
+}

@@ -7,7 +7,7 @@ import destr from 'destr'
 import type { LegacyAIConfig } from '../types'
 import type { Config } from '../types/config'
 import { Debug } from './log.util'
-import { matchKeyInObject, tolowerCaseInObject, transformToString } from './others.util'
+import { matchKeyInObject, toCamelCaseInObject, tolowerCaseInObject, transformToString } from './others.util'
 
 /**
  * Check the default OpenAI model configuration.
@@ -30,6 +30,7 @@ export function injectEnv() {
   if (fs.existsSync(config)) {
     let env = parse(fs.readFileSync(config, 'utf-8')) as Config
     env = tolowerCaseInObject(env)
+    env = toCamelCaseInObject(env)
     env = checkOpenAIDefaultModelConfig(env)
     process.env.config = JSON.stringify(env)
     Debug.native.log(env)
