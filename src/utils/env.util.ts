@@ -10,15 +10,18 @@ import { Debug } from './log.util'
 import { matchKeyInObject, tolowerCaseInObject, transformToString } from './others.util'
 
 export function injectEnv() {
+  if (matchKeyInObject(argv, 'env') || process.env.ENV || process.env.env)
+    consola.warn('You are using deprecated flag [--env]. It can\'t be used in this version anymore. Please use the new config format.')
+
   const config = matchKeyInObject(argv, 'config') || 'config.toml'
   if (fs.existsSync(config)) {
     let env = parse(fs.readFileSync(config, 'utf-8')) as Config
     env = tolowerCaseInObject(env)
-    Debug.log(env)
     process.env.config = JSON.stringify(env)
+    Debug.native.log(env)
     if (env.legacy) {
       for (const key in env.legacy) {
-        consola.warn(`[DEPRECATED] You are using deprecated config key [${key.toUpperCase()}]. It will be removed in the future.`)
+        consola.warn(`[DEPRECATED] You are using deprecated config key [${key.toUpperCase()}]. It can't be used in this version anymore. Please use the new config format.`)
         process.env[key.toUpperCase()] = transformToString((env.legacy as any)[key])
       }
       consola.warn('Please use the new config format. Check the documentation for more information: https://github.com/wibus-wee/raycast-unblock#readme')
