@@ -1,8 +1,8 @@
-import type { EnvConfig } from './src/types'
+import type { Config } from './src/types/config/index'
 
 declare global {
   namespace NodeJS {
-    interface ProcessEnv extends EnvConfig {
+    interface ProcessEnv extends Config {
       users: string
       NODE_ENV: 'development' | 'production'
     }

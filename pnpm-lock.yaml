@@ -29,9 +29,6 @@ importers:
       destr:
         specifier: ^2.0.2
         version: 2.0.2
-      dotenv:
-        specifier: ^16.4.1
-        version: 16.4.1
       fastify:
         specifier: ^4.26.0
         version: 4.26.0
@@ -44,6 +41,9 @@ importers:
       openai:
         specifier: ^4.26.0
         version: 4.26.0
+      toml:
+        specifier: ^3.0.0
+        version: 3.0.0
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
@@ -387,6 +387,7 @@ packages:
   /@babel/highlight@7.23.4:
     resolution: {integrity: sha512-acGdbYSfp2WheJoJm/EBBBLh/ID8KDc64ISZ9DYtBmC8/Q204PZJLHyzeB5qMzJ5trcOkybd78M4x2KWsUq++A==}
     engines: {node: '>=6.9.0'}
+    requiresBuild: true
     dependencies:
       '@babel/helper-validator-identifier': 7.22.20
       chalk: 2.4.2
@@ -2302,6 +2303,7 @@ packages:
   /dotenv@16.4.1:
     resolution: {integrity: sha512-CjA3y+Dr3FyFDOAMnxZEGtnW9KBR2M0JvvUtXNW+dYJL5ROWxP9DUHCwgFqpMk0OXCc0ljhaNTr2w/kutYIcHQ==}
     engines: {node: '>=12'}
+    dev: true
 
   /duplexer@0.1.2:
     resolution: {integrity: sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg==}
@@ -4730,6 +4732,10 @@ packages:
     dependencies:
       eslint-visitor-keys: 3.4.3
     dev: true
+
+  /toml@3.0.0:
+    resolution: {integrity: sha512-y/mWCZinnvxjTKYhJ+pYxwD0mRLVvOtdS2Awbgxln6iEnt4rk0yBxeSBHkGJcPucRiG0e55mwWp+g/05rsrd6w==}
+    dev: false
 
   /ts-api-utils@1.0.1(typescript@5.3.3):
     resolution: {integrity: sha512-lC/RGlPmwdrIBFTX59wwNzqh7aR2otPNPR/5brHZm/XKFYKsfqxihXUe9pU3JI+3vGkl+vyCoNNnPhJn3aLK1A==}

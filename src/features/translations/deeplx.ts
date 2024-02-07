@@ -2,7 +2,7 @@ import process from 'node:process'
 import type { FastifyRequest } from 'fastify'
 import { query } from '@ifyour/deeplx'
 import type { SourceLang, TargetLang } from '@ifyour/deeplx/dist/types'
-import type { TranslateFrom, TranslateTo } from '../../types'
+import type { TranslateFrom, TranslateTo } from '../../types/raycast/translate'
 
 export async function TranslateWithDeepLX(request: FastifyRequest): Promise<TranslateTo> {
   const body = request.body as TranslateFrom

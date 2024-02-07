@@ -1,41 +1,22 @@
+import fs from 'node:fs'
 import process from 'node:process'
 import consola from 'consola'
-import dotenv from 'dotenv'
 import { argv } from 'zx'
-import { type AIConfig, KeyOfEnvConfig } from '../types'
+import { parse } from 'toml'
+import type { LegencyAIConfig } from '../types'
 import { Debug } from './log.util'
+import { matchKeyInObject } from './others.util'
 
 export function injectEnv() {
-  if (argv.help) {
-    consola.log('Available options:')
-    KeyOfEnvConfig.forEach((key) => {
-      consola.log(`  --${key.toLowerCase()} <value>`)
-    })
-    process.exit(0)
+  const config = matchKeyInObject(argv, 'config') || 'config.toml'
+  if (fs.existsSync(config)) {
+    const _ = parse(fs.readFileSync(config, 'utf-8'))
   }
-  let envPath = '.env'
-  if (argv.env || argv.ENV || process.env.ENV)
-    envPath = argv.env || argv.ENV || process.env.ENV
-  const env = dotenv.config({
-    path: envPath,
-  })
-  // Override env from argv
-  KeyOfEnvConfig.forEach((key) => {
-    const argvKey = key.toLowerCase()
-    if (argv[argvKey] || argv[key])
-      (process.env[key] as any) = argv[argvKey]
-  })
-  Debug.info('Argv:', argv)
-  Debug.info('Env path:', envPath)
-  Debug.info('Parsed env:')
-  if (process.env.DEBUG)
-    // eslint-disable-next-line no-console
-    console.log(env.parsed)
 }
 
-export function getAIConfig(): AIConfig {
+export function getAIConfig(): LegencyAIConfig {
   return {
-    type: (process.env.AI_TYPE || 'openai') as AIConfig['type'],
+    type: (process.env.AI_TYPE || 'openai') as LegencyAIConfig['type'],
     key: process.env.AI_API_KEY || '',
     endpoint: process.env.OPENAI_BASE_URL,
     max_tokens: process.env.AI_MAX_TOKENS,

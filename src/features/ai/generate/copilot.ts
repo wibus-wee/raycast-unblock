@@ -1,8 +1,8 @@
 import consola from 'consola'
 import { generateCopilotRequestHeader, getAuthFromToken } from '../../../services/copilot'
-import type { AIGenerateContent } from '../../../types'
 import { getAIConfig } from '../../../utils/env.util'
 import { copilotClient } from '../../../utils'
+import type { AIGenerateContent } from '../../../types/internal/ai-generate-content'
 
 const completions = '/chat/completions'
 

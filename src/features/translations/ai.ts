@@ -1,9 +1,9 @@
 import type { FastifyRequest } from 'fastify'
-import type { TranslateFrom, TranslateTo } from '../../types'
 import { GeminiGenerateContent } from '../ai/generate/gemini'
 import { getAIConfig } from '../../utils/env.util'
 import { OpenaiGenerateContent } from '../ai/generate/openai'
 import { CopilotGenerateContent } from '../ai/generate/copilot'
+import type { TranslateFrom, TranslateTo } from '../../types/raycast/translate'
 import { generateTranslationsPrompts } from './prompts'
 
 export async function TranslateWithAI(request: FastifyRequest): Promise<TranslateTo> {

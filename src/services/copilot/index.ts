@@ -1,10 +1,9 @@
 import { ofetch } from 'ofetch'
 import { v4 as uuid } from 'uuid'
-import type { FastifyRequest } from 'fastify'
 import consola from 'consola'
-import type { GithubCopilotTokenAuthorization, GithubCopilotTokenAuthorizationRemoteBody } from '../../types'
 import { getCache, setCache } from '../../utils/cache.util'
 import { Debug } from '../../utils/log.util'
+import type { GithubCopilotTokenAuthorization, GithubCopilotTokenAuthorizationRemoteBody } from '../../types/github/copilot'
 
 const authUrl = 'https://api.github.com/copilot_internal/v2/token'
 

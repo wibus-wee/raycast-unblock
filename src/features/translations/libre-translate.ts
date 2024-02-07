@@ -1,8 +1,8 @@
 import process from 'node:process'
 import type { FastifyRequest } from 'fastify'
-import type { TranslateFrom, TranslateTo } from '../../types'
 import { TranslateWithLibreTranslateReverseAPI } from '../../services/libre-translate/reverse'
 import { FetchLibreTranslateAPI } from '../../services/libre-translate'
+import type { TranslateFrom, TranslateTo } from '../../types/raycast/translate'
 
 export async function TranslateWithLibreTranslate(request: FastifyRequest): Promise<TranslateTo> {
   const body = request.body as TranslateFrom

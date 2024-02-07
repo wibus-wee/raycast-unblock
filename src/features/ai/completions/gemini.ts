@@ -3,7 +3,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import { getAIConfig } from '../../../utils/env.util'
 
 export async function GeminiChatCompletion(request: FastifyRequest, reply: FastifyReply) {
-  const genAI = new GoogleGenerativeAI(getAIConfig().key)
+  const genAI = new GoogleGenerativeAI(getAIConfig().key || '')
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
 
   const body = request.body as {

@@ -12,7 +12,7 @@ import { Debug } from './utils/log.util'
 const prefix = '/api/v1'
 
 export function launch() {
-  const fastify = Fastify({ logger: process.env.DEBUG })
+  const fastify = Fastify({ logger: Boolean(process.env.DEBUG) || false })
   fastify.register(FastifySSEPlugin)
 
   fastify.register(MeRoute, { prefix: `${prefix}/me` })
