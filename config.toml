@@ -1,0 +1,38 @@
+[General]
+mode = "local"
+temperature = 0.5
+max_tokens = 100
+
+[AI]
+default = "OpenAI"
+
+[AI.OpenAI]
+base_url = "https://api.openai.com"
+api_key = "YOUR_API_KEY"
+temperature = 0.5
+max_tokens = 100
+
+[AI.Gemini]
+api_key = ""
+temperature = 0.5
+max_tokens = 100
+
+[AI.Copilot]
+api_key = ""
+temperature = 0.5
+max_tokens = 100
+
+[Translate]
+default = "DeepLX"
+
+[Translate.DeepLX]
+# proxy_endpoint = ""
+# access_token = ""
+
+[Translate.AI]
+default = "OpenAI"
+
+[Translate.LibreTranslate]
+base_url = "https://libretranslate.com"
+api_key = ""
+type = "reserve"
