@@ -1,28 +1,23 @@
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory } from '@google/generative-ai'
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import { getAIConfig } from '../../../utils/env.util'
+import { getConfig } from '../../../utils/env.util'
+import type { RaycastCompletions } from '../../../types/raycast/completions'
 
 export async function GeminiChatCompletion(request: FastifyRequest, reply: FastifyReply) {
-  const genAI = new GoogleGenerativeAI(getAIConfig().key || '')
+  const aiConfig = getConfig('ai')
+  const config = getConfig('ai')?.gemini
+  if (!config?.enable) {
+    reply.status(400).send({
+      error: 'Completions not supported for this model. Please check your config.',
+    })
+  }
+  const genAI = new GoogleGenerativeAI(config?.apiKey || '')
   const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
 
-  const body = request.body as {
-    additional_system_instructions: string
-    temperature: number
-    messages: {
-      content: {
-        system_instructions: string
-        command_instructions: string
-        text: string
-        temperature: number
-        [key: string]: string | number
-      }
-      author: 'user' | 'assistant'
-    }[]
-  }
+  const body = request.body as RaycastCompletions
   let system_message = ''
   const google_message = []
-  let temperature = Number(getAIConfig().temperature)
+  let temperature = config?.temperature || aiConfig?.temperature || 0.5
   const messages = body.messages
   for (const message of messages) {
     if ('system_instructions' in message.content)
@@ -56,7 +51,7 @@ export async function GeminiChatCompletion(request: FastifyRequest, reply: Fasti
     history: google_message,
     generationConfig: {
       temperature,
-      maxOutputTokens: getAIConfig().max_tokens ? Number(getAIConfig().max_tokens) : undefined,
+      maxOutputTokens: config?.maxTokens || aiConfig?.maxTokens,
       candidateCount: 1,
     },
     safetySettings: [

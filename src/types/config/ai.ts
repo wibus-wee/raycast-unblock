@@ -7,9 +7,10 @@ export interface AIConfig {
   copilot?: CopilotServiceConfig
 }
 export interface AIServiceConfig {
+  enable?: boolean
   apiKey?: string
-  maxTokens?: string
-  temperature?: string
+  maxTokens?: number
+  temperature?: number
 }
 export interface OpenAIServiceConfig extends AIServiceConfig {
   baseUrl?: string

@@ -2,29 +2,19 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import destr from 'destr'
 import consola from 'consola'
 import { generateCopilotRequestHeader, getAuthFromToken } from '../../../services/copilot'
-import { getAIConfig } from '../../../utils/env.util'
 import { copilotClient } from '../../../utils'
 import { processStream } from '../../../utils/stream-reader.util'
+import type { RaycastCompletions } from '../../../types/raycast/completions'
+import { getConfig } from '../../../utils/env.util'
 
 const completions = '/chat/completions'
 
 export async function CopilotChatCompletion(request: FastifyRequest, reply: FastifyReply) {
-  const body = request.body as {
-    additional_system_instructions: string
-    temperature: number
-    messages: {
-      content: {
-        system_instructions: string
-        command_instructions: string
-        text: string
-        temperature: number
-        [key: string]: string | number
-      }
-      author: 'user' | 'assistant'
-    }[]
-  }
+  const body = request.body as RaycastCompletions
+  const aiConfig = getConfig('ai')
+  const config = getConfig('ai')?.copilot
 
-  const app_token = getAIConfig().key
+  const app_token = config?.apiKey
   if (!app_token) {
     consola.error(`[Copilot] Auth error: Missing token`)
     throw new Error('Unauthorized. Missing token')
@@ -38,14 +28,15 @@ export async function CopilotChatCompletion(request: FastifyRequest, reply: Fast
     throw new Error(`Unauthorized. Invalid token. ${e.message}`)
   }
 
-  let temperature = Number(getAIConfig().temperature || 0.5)
+  let temperature = config?.temperature || aiConfig?.temperature || 0.5
   const requestBody = {
     messages: [] as any[],
-    model: 'gpt-4',
+    model: body.model,
     temperature,
     top_p: 1,
     n: 1,
     stream: true,
+    max_tokens: config?.maxTokens || aiConfig?.maxTokens,
   }
   const headers = generateCopilotRequestHeader(app_token, true) as Record<string, string>
   const messages = body.messages
