@@ -52,7 +52,7 @@ export function launch() {
   consola.info(`Raycast Unblock`)
   consola.info(`Version: ${packageJson.version}`)
   consola.info('Server starting...')
-  fastify.listen({ port: config?.port || 3000, host: config?.host || '127.0.0.1' }, (err, address) => {
+  fastify.listen({ port: config?.port || 3000, host: config?.host || '0.0.0.0' }, (err, address) => {
     if (err) {
       consola.error(err)
       process.exit(1)
