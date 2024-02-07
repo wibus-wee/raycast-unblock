@@ -5,8 +5,8 @@ host = "127.0.0.1"
 
 [AI]
 default = "OpenAI"
-temperature = 0.5
-max_tokens = 100
+temperature = 0.5 # If the temperature is not set in the specific AI service, this value will be used
+max_tokens = 100 # If the max_tokens is not set in the specific AI service, this value will be used
 
 [AI.OpenAI]
 base_url = "https://api.openai.com"
@@ -47,3 +47,16 @@ ai_api_key = ""
 openai_base_url = "https://api.openai.com"
 ai_max_tokens = 100
 ai_temperature = 0.5
+
+# Custom OpenAI Model
+# You can add your own OpenAI model just like the following:
+[AI.OpenAI.Models.gpt-3.5-turbo-16k-legacy]
+id = "gpt-3.5-turbo-16k" # if it's not provided, it will be generated from the Object key. For example, here it will be "gpt-3.5-turbo-16k-legacy"
+model = "gpt-3.5-turbo-16k" # if it's not provided, it will be generated from the Object key.
+name = "Legacy GPT-3.5 Turbo" # if it's not provided, it will be generated from the Object key.
+features = [
+  'chat',
+  'quick_ai',
+  'commands',
+  'api'
+] # if it's not provided, raycast-unblock will use the default features: chat, quick_ai, commands, api

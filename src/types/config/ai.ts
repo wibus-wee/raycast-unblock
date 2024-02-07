@@ -23,7 +23,7 @@ export interface AIServiceModelsConfig {
     id?: string
     model: string
     name?: string
-    features: string[]
+    features?: string[]
     provider?: string
     provider_name?: string
   }
