@@ -2,9 +2,15 @@ import type { Config } from './src/types/config/index'
 
 declare global {
   namespace NodeJS {
-    interface ProcessEnv extends Config {
+    interface ProcessEnv {
       users: string
-      NODE_ENV: 'development' | 'production'
+      config: string
+      // LegacyAIConfig
+      AI_TYPE?: string
+      AI_API_KEY?: string
+      OPENAI_BASE_URL?: string
+      AI_MAX_TOKENS?: string
+      AI_TEMPERATURE?: string
     }
   }
 }

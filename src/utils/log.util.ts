@@ -13,7 +13,7 @@ function DebugSuccess(message: any, ...args: any[]) {
 
 function DebugWarn(message: any, ...args: any[]) {
   if (process.env.DEBUG)
-    consola.warn(`[DEBUG] `, message, ...args)
+    consola.warn(`[DEBUG]`, message, ...args)
 }
 
 function DebugError(message: any, ...args: any[]) {
@@ -23,7 +23,7 @@ function DebugError(message: any, ...args: any[]) {
 
 function DebugLog(message: any, ...args: any[]) {
   if (process.env.DEBUG)
-    consola.log(`[DEBUG]`, message, ...args)
+    consola.log(message, ...args)
 }
 
 export const Debug = {

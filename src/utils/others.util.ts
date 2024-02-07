@@ -19,3 +19,14 @@ export function matchKeyInObject<T = Record<any, any>>(obj: T, key: string) {
   const matched = keys.find(k => k.toLowerCase() === key.toLowerCase())
   return matched ? (obj as Record<string, any>)[matched] : undefined
 }
+
+export function tolowerCaseInObject<T = Record<any, any>>(obj: T) {
+  const keys = Object.keys(obj || {})
+  const newObj = {} as T
+  keys.forEach((k) => {
+    (newObj as any)[k.toLowerCase()] = (obj as any)[k]
+    if (typeof (obj as any)[k] === 'object')
+      (newObj as any)[k.toLowerCase()] = tolowerCaseInObject((obj as any)[k])
+  })
+  return newObj
+}

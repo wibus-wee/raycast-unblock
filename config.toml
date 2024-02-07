@@ -41,7 +41,7 @@ type = "reserve"
 
 # The following is for the legacy configuration
 # They will be removed in the future
-[Legency]
+[Legacy]
 ai_type = "OpenAI"
 ai_api_key = ""
 openai_base_url = "https://api.openai.com"

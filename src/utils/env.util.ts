@@ -7,13 +7,22 @@ import destr from 'destr'
 import type { LegacyAIConfig } from '../types'
 import type { Config } from '../types/config'
 import { Debug } from './log.util'
-import { matchKeyInObject } from './others.util'
+import { matchKeyInObject, tolowerCaseInObject, transformToString } from './others.util'
 
 export function injectEnv() {
   const config = matchKeyInObject(argv, 'config') || 'config.toml'
   if (fs.existsSync(config)) {
-    const env = parse(fs.readFileSync(config, 'utf-8'))
+    let env = parse(fs.readFileSync(config, 'utf-8')) as Config
+    env = tolowerCaseInObject(env)
+    Debug.log(env)
     process.env.config = JSON.stringify(env)
+    if (env.legacy) {
+      for (const key in env.legacy) {
+        consola.warn(`[DEPRECATED] You are using deprecated config key [${key.toUpperCase()}]. It will be removed in the future.`)
+        process.env[key.toUpperCase()] = transformToString((env.legacy as any)[key])
+      }
+      consola.warn('Please use the new config format. Check the documentation for more information: https://github.com/wibus-wee/raycast-unblock#readme')
+    }
   }
 }
 
