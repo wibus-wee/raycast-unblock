@@ -9,6 +9,7 @@ temperature = 0.5 # If the temperature is not set in the specific AI service, th
 max_tokens = 100 # If the max_tokens is not set in the specific AI service, this value will be used
 
 [AI.OpenAI]
+# default = "gpt-3.5-turbo-16k.legacy" # If the default is not set, the default model will be used
 base_url = "https://api.openai.com"
 api_key = "YOUR_API_KEY"
 temperature = 0.5
@@ -52,7 +53,6 @@ ai_temperature = 0.5
 # Custom OpenAI Model
 # You can add your own OpenAI model just like the following:
 [AI.OpenAI.Models.gpt-3_5-turbo-16k-legacy]
-isDefault = false
 id = "gpt-3.5-turbo-16k.legacy" # if it's not provided, it will be generated from the Object key. For example, here it will be "gpt-3.5-turbo-16k-legacy"
 model = "gpt-3.5-turbo-16k.legacy" # if it's not provided, it will be generated from the Object key.
 name = "Legacy GPT-3.5 Turbo" # if it's not provided, it will be generated from the Object key.

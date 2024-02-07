@@ -15,6 +15,7 @@ export interface AIServiceConfig {
 export interface OpenAIServiceConfig extends AIServiceConfig {
   baseUrl?: string
   models?: AIServiceModelsConfig
+  default?: string
 }
 export interface GeminiServiceConfig extends AIServiceConfig {}
 export interface CopilotServiceConfig extends AIServiceConfig {
@@ -23,7 +24,6 @@ export interface CopilotServiceConfig extends AIServiceConfig {
 
 export interface AIServiceModelsConfig {
   [key: string]: {
-    isDefault?: boolean
     id?: string
     model: string
     name?: string
