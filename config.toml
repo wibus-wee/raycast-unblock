@@ -1,10 +1,12 @@
 [General]
 mode = "local"
-temperature = 0.5
-max_tokens = 100
+port = 3000
+host = "127.0.0.1"
 
 [AI]
 default = "OpenAI"
+temperature = 0.5
+max_tokens = 100
 
 [AI.OpenAI]
 base_url = "https://api.openai.com"
@@ -36,3 +38,12 @@ default = "OpenAI"
 base_url = "https://libretranslate.com"
 api_key = ""
 type = "reserve"
+
+# The following is for the legacy configuration
+# They will be removed in the future
+[Legency]
+ai_type = "OpenAI"
+ai_api_key = ""
+openai_base_url = "https://api.openai.com"
+ai_max_tokens = 100
+ai_temperature = 0.5
