@@ -1,4 +1,3 @@
-import process from 'node:process'
 import { ofetch } from 'ofetch'
 import { v4 } from 'uuid'
 

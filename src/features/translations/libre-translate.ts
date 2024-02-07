@@ -1,4 +1,3 @@
-import process from 'node:process'
 import type { FastifyRequest } from 'fastify'
 import { TranslateWithLibreTranslateReverseAPI } from '../../services/libre-translate/reverse'
 import { FetchLibreTranslateAPI } from '../../services/libre-translate'

@@ -1,4 +1,3 @@
-import process from 'node:process'
 import type { FastifyRequest } from 'fastify'
 import { query } from '@ifyour/deeplx'
 import type { SourceLang, TargetLang } from '@ifyour/deeplx/dist/types'

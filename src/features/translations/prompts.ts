@@ -1,4 +1,3 @@
-import type process from 'node:process'
 import { TRANSLATE_DICT_REVERSE } from './dict'
 
 export function generateTranslationsPrompts(targetLang: string, text: string, type: string) {
