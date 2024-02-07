@@ -11,6 +11,9 @@ export function transformToObj<T>(str: string) {
   return destr<T>(str)
 }
 
+/**
+ * It will match the key in the object (not case-sensitive)
+ */
 export function matchKeyInObject<T = Record<any, any>>(obj: T, key: string) {
   const keys = Object.keys(obj || {})
   const matched = keys.find(k => k.toLowerCase() === key.toLowerCase())
