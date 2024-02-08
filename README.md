@@ -19,6 +19,9 @@ docker run -d --name raycast-unblock -p 3000:3000 wibuswee/raycast-unblock:lates
 
 More details can be found in [Usage](#usage).
 
+> [!WARNING]
+> There are very many **breaking updates** in v0.1.0.beta.x -> v0.2.0.beta.0, go to [Release](https://github.com/wibus-wee/raycast-unblock/releases/tag/v0.2.0-beta.0) for details!
+
 ## Disclaimer
 
 We only borrowed the **operation interface** of Raycast, and **did not modify the backend server** of Raycast.
