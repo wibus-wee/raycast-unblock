@@ -17,7 +17,7 @@ export interface OpenAIServiceConfig extends AIServiceConfig {
   models?: AIServiceModelsConfig
   default?: string
   isAzure?: boolean
-  azureDeploymentId?: string
+  azureDeploymentName?: string
 }
 export interface GeminiServiceConfig extends AIServiceConfig {}
 export interface CopilotServiceConfig extends AIServiceConfig {

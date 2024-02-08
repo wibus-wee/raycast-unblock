@@ -64,7 +64,7 @@ export async function OpenAIChatCompletion(request: FastifyRequest, reply: Fasti
       new AzureKeyCredential(openaiConfig!.apiKey!),
     )
     stream = await azureOpenai.streamChatCompletions(
-      openaiConfig.azureDeploymentId || body.model,
+      openaiConfig.azureDeploymentName || body.model,
       openai_message as any,
       {
         n: 1,
