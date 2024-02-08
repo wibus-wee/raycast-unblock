@@ -1,12 +1,10 @@
-import { getConfig } from '../../utils/env.util'
-
 export const OPENAI_SERVICE_PROVIDERS = [
   {
     id: 'openai-gpt-3.5-turbo',
     model: 'gpt-3.5-turbo',
     name: 'GPT-3.5 Turbo',
     provider: 'openai',
-    provider_name: getConfig('ai')?.openai?.isAzure ? 'Azure' : 'OpenAI',
+    provider_name: 'OpenAI',
     requires_better_ai: true,
     features: ['chat', 'quick_ai', 'commands', 'api'],
   },
