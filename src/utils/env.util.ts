@@ -66,14 +66,42 @@ export function injectEnv() {
       consola.warn('Please use the new config format. Check the documentation for more information: https://github.com/wibus-wee/raycast-unblock#readme')
     }
   }
+  getConfig('ai', 'functions.tavilyAiApiKey')
 }
 
-export function getConfig<T extends keyof Config>(key?: T): Config[T] {
+export function getConfig<T extends keyof Config>(key?: T, inKey?: string): Config[T] {
   const env = process.env.config
   if (env) {
     const config = destr<Config>(env)
-    if (key)
+    if (key) {
+      Debug.info(`[Config] Get config key [${key}]`)
+      if (inKey) {
+        if (inKey.includes('.')) {
+          Debug.info(`[Config] Get config key [${key}] with dot notation`)
+          const keys = inKey.split('.')
+          Debug.info(`[Config] Get config key [${key} -> ${keys.join(' -> ')}]`)
+          let _key = key
+          let value = config as any
+          for (const k of keys) {
+            if (value[_key]?.[k]) {
+              value = value[_key][k]
+              _key = k as any
+            }
+            else { return {} }
+          }
+          return value
+        }
+        else {
+          Debug.info(`[Config] Get config key [${key}] with inKey [${inKey}]`)
+          const _c = config as any
+          if (_c[inKey] && _c[inKey][key])
+            return _c[inKey][key]
+          else
+            return {}
+        }
+      }
       return config[key]
+    }
     return config as Config[T]
   }
   return {} as Config[T]
