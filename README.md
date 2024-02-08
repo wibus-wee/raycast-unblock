@@ -169,9 +169,11 @@ You need to throw all Raycast requests to the backend built by this project, but
 You can modify your hosts file to make Raycast requests go to the backend built by this project.
 
 ```conf
-backend.raycast.com <Your Backend IP>
-# backend.raycast.com 127.0.0.1
+<Your Backend IP> backend.raycast.com
 ```
+
+> [!CAUTION]
+> This method can only be used when the backend is deployed **remotely**, and cannot be used when the backend is deployed locally.
 
 But this method is required to modify the port of the backend to `80`. You should modify the `config.toml` file and set `general.port` to `80`.
 
