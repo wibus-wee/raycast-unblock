@@ -8,13 +8,13 @@ import type { RaycastCompletions } from '../../types/raycast/completions'
 export function Completions(request: FastifyRequest, reply: FastifyReply) {
   const body = request.body as RaycastCompletions
   const config = getConfig('ai')
-  const model = (body.model || config?.default?.toLowerCase()) as keyof typeof config
-  if (!(config && model && config[model] && !(config[model] as any).disabled)) {
+  const provider = (body.provider || config?.default?.toLowerCase()) as keyof typeof config
+  if (!(config && provider && config[provider] && !(config[provider] as any).disabled)) {
     reply.status(400).send({
       error: 'Completions not supported for this model. Please check your config.',
     })
   }
-  switch (model) {
+  switch (provider) {
     case 'gemini':
       return GeminiChatCompletion(request, reply)
     case 'openai':

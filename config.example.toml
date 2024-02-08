@@ -30,6 +30,12 @@ max_tokens = 100
 # You can edit the base_url if you want to use the custom OpenAI server
 # base_url = "https://api.openai.com"
 api_key = "YOUR_API_KEY"
+
+# if you'd like to use azure openai
+# is_azure = true
+# base_url = "https://<resource_name>.openai.azure.com"
+# azure_deployment_id = "YOUR_AZURE_DEPLOYMENT_ID" # if not provided, use req.body.model
+
 # If the parameter is set in the specific AI service
 # this value will be used, and it has the highest priority
 temperature = 0.5

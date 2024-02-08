@@ -44,6 +44,7 @@
     "prepare": "simple-git-hooks"
   },
   "dependencies": {
+    "@azure/openai": "1.0.0-beta.11",
     "@google/generative-ai": "^0.2.0",
     "@ifyour/deeplx": "^0.1.17",
     "consola": "^3.2.3",
