@@ -1,10 +1,12 @@
+import { getConfig } from '../../utils/env.util'
+
 export const OPENAI_SERVICE_PROVIDERS = [
   {
     id: 'openai-gpt-3.5-turbo',
     model: 'gpt-3.5-turbo',
     name: 'GPT-3.5 Turbo',
     provider: 'openai',
-    provider_name: 'OpenAI',
+    provider_name: getConfig('ai')?.openai?.isAzure ? 'Azure' : 'OpenAI',
     requires_better_ai: true,
     features: ['chat', 'quick_ai', 'commands', 'api'],
   },
@@ -16,7 +18,7 @@ export const GEMINI_SERVICE_PROVIDERS = [
     model: 'gemini-pro',
     name: 'Gemini Pro',
     provider: 'gemini',
-    provider_name: 'Gemini',
+    provider_name: 'Google',
     requires_better_ai: true,
     features: ['chat', 'quick_ai', 'commands', 'api'],
   },
@@ -27,7 +29,7 @@ export const GITHUB_COPILOT_3_5_TURBO = {
   model: 'gpt-3.5-turbo',
   name: 'Copilot GPT-3.5 Turbo',
   provider: 'copilot',
-  provider_name: 'Copilot',
+  provider_name: 'Github',
   requires_better_ai: true,
   features: ['chat', 'quick_ai', 'commands', 'api'],
 }
@@ -36,7 +38,7 @@ export const GITHUB_COPILOT_4 = {
   model: 'gpt-4',
   name: 'Copilot GPT-4',
   provider: 'copilot',
-  provider_name: 'Copilot',
+  provider_name: 'Github',
   requires_better_ai: true,
   features: ['chat', 'quick_ai', 'commands', 'api'],
 }
