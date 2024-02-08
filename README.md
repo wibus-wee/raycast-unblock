@@ -214,15 +214,16 @@ pm2 start ./raycast-unblock-app --name raycast-unblock
 ## Features
 
 ### Azure OpenAI
-Assume you have such a azure end point:
-https://**myAzure**.openai.azure.com/openai/deployments/**myDeployment**/chat/completions?api-version=2023-07-01-preview
+Assume you have such a azure endpoint link like following:
+
+https://**yourAzure**.openai.azure.com/openai/deployments/**yourDeployment**/chat/completions?api-version=2023-07-01-preview
 
 modify `[AI.OpenAI]` field in `config.toml` according to the following steps.
 1. set `is_azure = true`
-2. set `base_url = https://myAzure.openai.azure.com`
-3. set `azure_deployment_name = myDeployment`
+2. set `base_url = https://yourAzure.openai.azure.com`
+3. set `azure_deployment_name = yourDeployment`
 
-`azure_deployment_name` is optional and when it isn't provided, using `req.body.model` as a substitute. It is useful when you want to use multiple models
+`azure_deployment_name` is optional and when it isn't provided, using `req.body.model` as a substitute. It is useful when you want to use multiple models.
 ### GitHub Copilot
 
 Raycast Unblock provides a GitHub Copilot service, which can be used in Raycast feature.
