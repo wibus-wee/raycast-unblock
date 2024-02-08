@@ -11,7 +11,7 @@ RUN pnpm build:rollup
 RUN pnpm bundle
 
 
-FROM alpine:3.16 as runner
+FROM alpine:3.19 as runner
 
 RUN apk add --no-cache libstdc++
 
