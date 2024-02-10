@@ -1,6 +1,9 @@
 import OpenAI from 'openai'
+import { AzureKeyCredential, type ChatCompletions, type EventStream, OpenAIClient } from '@azure/openai'
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import destr from 'destr'
+import type { ChatCompletionChunk } from 'openai/resources/index.mjs'
+import type { Stream } from 'openai/streaming.mjs'
 import { getConfig } from '../../../utils/env.util'
 import type { RaycastCompletions } from '../../../types/raycast/completions'
 import { getFunctionCallToolsConfig } from '../functionsCall'
@@ -10,10 +13,6 @@ import { AvailableFunctions } from '../functionsCall/constants'
 export async function OpenAIChatCompletion(request: FastifyRequest, reply: FastifyReply) {
   const aiConfig = getConfig('ai')
   const openaiConfig = getConfig('ai')?.openai
-  const openai = new OpenAI({
-    baseURL: openaiConfig?.baseUrl,
-    apiKey: openaiConfig?.apiKey,
-  })
 
   const body = request.body as RaycastCompletions
 
@@ -60,118 +59,155 @@ export async function OpenAIChatCompletion(request: FastifyRequest, reply: Fasti
     if ('temperature' in message.content)
       temperature = message.content.temperature
   }
-  const stream = await openai.chat.completions.create({
-    stream: true,
-    messages: openai_message as any,
-    model: body.model,
-    temperature,
-    stop: null,
-    n: 1,
-    tools: getFunctionCallToolsConfig(),
-    tool_choice: 'auto',
-    max_tokens: openaiConfig?.maxTokens || aiConfig?.maxTokens,
-  }).catch((err) => {
-    throw new Error(`[AI] OpenAI Chat Completions Failed: ${err}`)
-  })
 
-  if (stream instanceof Error)
-    throw new Error(`[AI] OpenAI Chat Completions Failed: ${stream}`)
+  let stream: Stream<ChatCompletionChunk> | EventStream<ChatCompletions>
 
-  return reply.sse((async function * source() {
-    try {
-      let queryToolName = ''
-      let queryToolCallID = ''
-      let queryHandler: Function = () => {}
-      const queryPrompts: Record<string, any>[] = []
-      const queryParts = []
-      for await (const data of stream) {
-        const { choices: [{ delta: { content, tool_calls }, finish_reason }] } = data
+  if (openaiConfig?.isAzure) {
+    const azureOpenai = new OpenAIClient(
+      openaiConfig!.baseUrl!,
+      new AzureKeyCredential(openaiConfig!.apiKey!),
+    )
+    stream = await azureOpenai.streamChatCompletions(
+      openaiConfig.azureDeploymentName || body.model,
+      openai_message as any,
+      {
+        n: 1,
+        temperature,
+        maxTokens: openaiConfig?.maxTokens || aiConfig?.maxTokens,
+      },
+    ).catch((err) => {
+      throw new Error(`[AI] Azure OpenAI Chat Completions Failed: ${err?.message}`)
+    })
+  }
+  else {
+    const openai = new OpenAI({
+      baseURL: openaiConfig?.baseUrl,
+      apiKey: openaiConfig?.apiKey,
+    })
 
-        if (!content && !finish_reason)
-          continue // ignore this line
+    stream = await openai.chat.completions.create({
+      stream: true,
+      messages: openai_message as any,
+      model: body.model,
+      temperature,
+      stop: null,
+      n: 1,
+      tools: getFunctionCallToolsConfig(),
+      tool_choice: 'auto',
+      max_tokens: openaiConfig?.maxTokens || aiConfig?.maxTokens,
+    }).catch((err) => {
+      throw new Error(`[AI] OpenAI Chat Completions Failed: ${err}`)
+    })
 
-        // Handle tool calls
-        if (tool_calls) {
-          const tool_call = tool_calls[0]
-          if (tool_call) {
-            queryToolCallID = tool_call.id!
-            queryToolName = tool_call.function?.name || ''
-            Debug.info(`[AI] OpenAI Chat Completions Tool Call: ${queryToolName} - ${queryToolCallID}`)
-            if (tool_call.function?.arguments)
-              queryParts.push(tool_call.function?.arguments)
-            // console.log('queryParts', queryParts)
-          }
-        }
+    if (stream instanceof Error)
+      throw new Error(`[AI] OpenAI Chat Completions Failed: ${stream}`)
 
-        const res: Record<string, unknown> = { text: content || '' }
-        if (finish_reason) {
-          res.finish_reason = finish_reason
+    return reply.sse((async function* source() {
+      try {
+        let queryToolName = ''
+        let queryToolCallID = ''
+        let queryHandler: Function = () => {}
+        const queryPrompts: Record<string, any>[] = []
+        const queryParts = []
+        for await (const data of stream) {
+          const { choices: [{ delta: { content, tool_calls } }] } = data
+          const choice = data.choices[0]
+          if (!choice)
+            continue
+
+          let finish_reason
+
+          if ('finish_reason' in choice)
+            finish_reason = choice.finish_reason
+          else
+            finish_reason = choice.finishReason
+
+          if (!content && !finish_reason)
+            continue // ignore this line
 
           // Handle tool calls
-          if (finish_reason === 'tool_calls') {
-            const tool = AvailableFunctions[queryToolName]
-            if (tool) {
-              yield { data: JSON.stringify({ notification: tool.notifications.calls?.text || '' }), notification_type: tool.notifications.calls?.type || 'tool_used' }
-              queryHandler = tool.handler
-              queryPrompts.push(...tool.prompts || [])
+          if (tool_calls) {
+            const tool_call = tool_calls[0]
+            if (tool_call) {
+              queryToolCallID = tool_call.id!
+              queryToolName = tool_call.function?.name || ''
+              Debug.info(`[AI] OpenAI Chat Completions Tool Call: ${queryToolName} - ${queryToolCallID}`)
+              if (tool_call.function?.arguments)
+                queryParts.push(tool_call.function?.arguments)
+            // console.log('queryParts', queryParts)
             }
-            const queryWords = destr<any>(queryParts.join(''))
-            openai_message.push(
-              {
-                role: 'assistant',
-                content: null,
-                tool_calls: [
-                  {
-                    id: queryToolCallID,
-                    type: 'function',
-                    function: {
-                      name: queryToolName,
-                      arguments: queryParts,
-                    },
-                  },
-                ],
-              },
-            )
-            // Call the handler
-            const handlerRes = await queryHandler(queryWords)
-            yield { data: JSON.stringify(handlerRes) }
-            openai_message.push(
-              {
-                role: 'tool',
-                content: JSON.stringify(handlerRes),
-                tool_call_id: queryToolCallID,
-              },
-            )
-            queryPrompts.forEach((prompt) => {
-              openai_message.push(prompt)
-            })
-
-            continue
           }
 
-          yield { data: JSON.stringify({
-            text: '',
-            finish_reason,
-          }) }
-        }
+          const res: Record<string, unknown> = { text: content || '' }
+          if (finish_reason) {
+            res.finish_reason = finish_reason
 
+            // Handle tool calls
+            if (finish_reason === 'tool_calls') {
+              const tool = AvailableFunctions[queryToolName]
+              if (tool) {
+                yield { data: JSON.stringify({ notification: tool.notifications.calls?.text || '' }), notification_type: tool.notifications.calls?.type || 'tool_used' }
+                queryHandler = tool.handler
+                queryPrompts.push(...tool.prompts || [])
+              }
+              const queryWords = destr<any>(queryParts.join(''))
+              openai_message.push(
+                {
+                  role: 'assistant',
+                  content: null,
+                  tool_calls: [
+                    {
+                      id: queryToolCallID,
+                      type: 'function',
+                      function: {
+                        name: queryToolName,
+                        arguments: queryParts,
+                      },
+                    },
+                  ],
+                },
+              )
+              // Call the handler
+              const handlerRes = await queryHandler(queryWords)
+              yield { data: JSON.stringify(handlerRes) }
+              openai_message.push(
+                {
+                  role: 'tool',
+                  content: JSON.stringify(handlerRes),
+                  tool_call_id: queryToolCallID,
+                },
+              )
+              queryPrompts.forEach((prompt) => {
+                openai_message.push(prompt)
+              })
+
+              continue
+            }
+
+            yield { data: JSON.stringify({
+              text: '',
+              finish_reason,
+            }) }
+          }
+
+          yield { data: JSON.stringify(res) }
+        }
+      }
+      catch (e: any) {
+        console.error('Error: ', e.message)
+        const res = {
+          text: '',
+          finish_reason: e.message,
+        }
         yield { data: JSON.stringify(res) }
       }
-    }
-    catch (e: any) {
-      console.error('Error: ', e.message)
-      const res = {
-        text: '',
-        finish_reason: e.message,
+      finally {
+        const res = {
+          text: '',
+          finish_reason: 'stop',
+        }
+        yield { data: JSON.stringify(res) }
       }
-      yield { data: JSON.stringify(res) }
-    }
-    finally {
-      const res = {
-        text: '',
-        finish_reason: 'stop',
-      }
-      yield { data: JSON.stringify(res) }
-    }
-  })())
+    })())
+  }
 }
