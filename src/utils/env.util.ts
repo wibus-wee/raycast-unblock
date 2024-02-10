@@ -74,6 +74,10 @@ export function getConfig<T extends keyof Config>(key?: T, inKey?: string): Conf
     const config = destr<Config>(env)
     if (key) {
       // Debug.info(`[Config] Get config key [${key}]`)
+      if (key.includes('.')) {
+        Debug.info(`[Config] Get config key [${key}] with dot notation`)
+        return getValueFromDotNotation(config, key)
+      }
       if (inKey) {
         if (inKey.includes('.')) {
           Debug.info(`[Config] Get config key [${key}] with dot notation`)

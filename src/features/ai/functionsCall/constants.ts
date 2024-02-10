@@ -3,6 +3,7 @@ import { Serp } from './functions/serp'
 
 export const AvailableFunctions: IAvailableFunctions = {
   serp: {
+    id: 'serp',
     description: 'Search Engine Results Page',
     paramters: {
       properties: {
@@ -25,7 +26,7 @@ export const AvailableFunctions: IAvailableFunctions = {
       },
     ],
     requiredEnv: [
-      'ai.functions.apiHubApiKey',
+      // 'ai.functions.apiHubApiKey',
       'ai.functions.tavilyAiApiKey',
     ],
   },
