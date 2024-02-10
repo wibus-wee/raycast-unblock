@@ -6,7 +6,7 @@ import { parse } from 'toml'
 import destr from 'destr'
 import type { Config } from '../types/config'
 import { Debug } from './log.util'
-import { matchKeyInObject, toCamelCaseInObject, tolowerCaseInObject, transformToString } from './others.util'
+import { getValueFromDotNotation, matchKeyInObject, toCamelCaseInObject, tolowerCaseInObject, transformToString } from './others.util'
 
 /**
  * Check the default OpenAI model configuration.
@@ -66,7 +66,6 @@ export function injectEnv() {
       consola.warn('Please use the new config format. Check the documentation for more information: https://github.com/wibus-wee/raycast-unblock#readme')
     }
   }
-  getConfig('ai', 'functions.tavilyAiApiKey')
 }
 
 export function getConfig<T extends keyof Config>(key?: T, inKey?: string): Config[T] {
@@ -74,22 +73,11 @@ export function getConfig<T extends keyof Config>(key?: T, inKey?: string): Conf
   if (env) {
     const config = destr<Config>(env)
     if (key) {
-      Debug.info(`[Config] Get config key [${key}]`)
+      // Debug.info(`[Config] Get config key [${key}]`)
       if (inKey) {
         if (inKey.includes('.')) {
           Debug.info(`[Config] Get config key [${key}] with dot notation`)
-          const keys = inKey.split('.')
-          Debug.info(`[Config] Get config key [${key} -> ${keys.join(' -> ')}]`)
-          let _key = key
-          let value = config as any
-          for (const k of keys) {
-            if (value[_key]?.[k]) {
-              value = value[_key][k]
-              _key = k as any
-            }
-            else { return {} }
-          }
-          return value
+          return getValueFromDotNotation(config[key], inKey)
         }
         else {
           Debug.info(`[Config] Get config key [${key}] with inKey [${inKey}]`)
