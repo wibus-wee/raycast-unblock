@@ -1,5 +1,6 @@
 import OpenAI from 'openai'
-import { AzureKeyCredential, type ChatCompletions, type EventStream, OpenAIClient } from '@azure/openai'
+import { AzureKeyCredential, OpenAIClient } from '@azure/openai'
+import type { ChatChoice, type ChatCompletions, type EventStream } from '@azure/openai'
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import destr from 'destr'
 import type { ChatCompletionChunk } from 'openai/resources/index.mjs'
@@ -120,7 +121,7 @@ export async function OpenAIChatCompletion(request: FastifyRequest, reply: Fasti
           if ('finish_reason' in choice)
             finish_reason = choice.finish_reason
           else
-            finish_reason = choice.finishReason
+            finish_reason = (choice as ChatChoice).finishReason
 
           if (!content && !finish_reason)
             continue // ignore this line
