@@ -13,8 +13,8 @@ export const AvailableFunctions: IAvailableFunctions = {
       },
     },
     handler: Serp,
-    data: {
-      calling: {
+    notifications: {
+      calls: {
         text: 'Searching in Google...',
         type: 'tool_used',
       },

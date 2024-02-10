@@ -13,8 +13,8 @@ export interface IAvailableFunction {
     }
   }
   handler: Function
-  data: {
-    'calling'?: {
+  notifications: {
+    'calls'?: {
       text: string
       type: string | 'tool_used'
     }
