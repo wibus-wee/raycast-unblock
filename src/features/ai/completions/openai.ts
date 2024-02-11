@@ -1,6 +1,6 @@
 import OpenAI from 'openai'
 import { AzureKeyCredential, OpenAIClient } from '@azure/openai'
-import type { ChatChoice, type ChatCompletions, type EventStream } from '@azure/openai'
+import type { ChatChoice, ChatCompletions, EventStream } from '@azure/openai'
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import destr from 'destr'
 import type { ChatCompletionChunk } from 'openai/resources/index.mjs'
@@ -74,6 +74,8 @@ export async function OpenAIChatCompletion(request: FastifyRequest, reply: Fasti
       {
         n: 1,
         temperature,
+        tools: getFunctionCallToolsConfig(),
+        toolChoice: 'auto',
         maxTokens: openaiConfig?.maxTokens || aiConfig?.maxTokens,
       },
     ).catch((err) => {
