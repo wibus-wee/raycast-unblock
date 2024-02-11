@@ -8,9 +8,10 @@ export interface AIConfig {
   copilot?: CopilotServiceConfig
 }
 export interface AIServiceFunctionsConfig {
-  // Serp API
-  apiHubApiKey?: string
-  tavilyAiApiKey?: string
+  serp?: {
+    apiHubApiKey?: string
+    tavilyAiApiKey?: string
+  }
 }
 export interface AIServiceConfig {
   disable?: boolean

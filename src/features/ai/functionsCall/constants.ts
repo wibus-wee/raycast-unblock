@@ -26,8 +26,8 @@ export const AvailableFunctions: IAvailableFunctions = {
       },
     ],
     requiredEnv: [
-      // 'ai.functions.apiHubApiKey',
-      'ai.functions.tavilyAiApiKey',
+      'ai.functions.serp.apiHubApiKey',
+      // 'ai.functions.serp.tavilyAiApiKey',
     ],
   },
 }
