@@ -36,10 +36,13 @@ See [Unblock Features](#unblock-features) and [Unblock Routes](#unblock-routes) 
 
 - [x] Pro Plan Logo
 - [x] AI Chat
-  - [x] OpenAI (support Azure)
-  - [x] Gemini
-  - [x] [GitHub Copilot](#github-copilot)
-  - [ ] More?
+  - [x] [Function Call](#function-call) **(`🌊 Alpha`)**
+    - [ ] Compatibility Layer **(`🌊 Alpha`)**
+  - [x] Services
+    - [x] OpenAI (support Azure)
+    - [x] Gemini
+    - [x] [GitHub Copilot](#github-copilot)
+    - [ ] More?
 - [x] Translations
   - [x] [Shortcut](#shortcut-translator) (Only for macOS)
   - [x] [AI](#ai-translator)
@@ -274,6 +277,23 @@ You can use AI to translate text in Raycast Translate feature. Prompts provided 
 #### Notice
 
 - Pay attention to the request and usage issues, Translator may cause frequent requests to AI services, resulting in overuse or rate limit, so please use it carefully.
+
+### Function Call
+
+You can use the function call feature in AI Chat, which is currently in the `🌊 Alpha` stage.
+
+#### Usage
+
+Now we support the following functions:
+
+- [x] `Serp` - Search Engine Results Page
+
+You can find the environment variables which are required to use this feature in the `config.example.toml` file. For example:
+
+```toml
+[AI.Functions.Serp]
+apiHub_api_key = ""
+```
 
 ## Q&A
 

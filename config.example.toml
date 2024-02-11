@@ -20,9 +20,9 @@ default = "copilot"
 temperature = 0.5
 max_tokens = 100
 
-[AI.Functions]
+[AI.Functions.Serp]
 apiHub_api_key = ""
-tavily_ai_api_key = ""
+# tavily_ai_api_key = "" # Tavily currently doesn't support.
 
 [AI.OpenAI]
 # If the default model is not set,
