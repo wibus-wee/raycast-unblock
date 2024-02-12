@@ -9,10 +9,6 @@ services:
     image: wibuswee/raycast-unblock:latest
     environment:
       - TZ=Asia/Shanghai
-      - PORT=3000
-      - HOST=0.0.0.0
-      # - AI_API_KEY=your_api_key
-      # - TRANSLATE_TYPE=ai
     # ## If you need to use config.toml file, please uncomment the following line ####
     volumes:
       - ./configs/raycast-unblock:/app/config
