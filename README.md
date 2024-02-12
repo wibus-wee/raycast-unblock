@@ -178,7 +178,7 @@ You can modify your hosts file to make Raycast requests go to the backend built 
 > [!CAUTION]
 > This method can only be used when the backend is deployed **remotely**, and cannot be used when the backend is deployed locally.
 
-But this method is required to modify the port of the backend to `80`. You should modify the `config.toml` file and set `general.port` to `80`.
+For users who use remote deployment, we recommend using `reverse proxy` to make Raycast Unblock service can be accessed normally, but this method requires you to **deploy SSL certificate** remotely, otherwise it will be invalid. At the same time, `general.host` needs to be configured as `0.0.0.0` in the `config.toml` file.
 
 > [!NOTE]
 > If you are building the backend locally, please do not let your proxy tool proxy both Raycast's requests and the backend service's requests, as this will cause it to not work properly.
