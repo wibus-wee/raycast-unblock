@@ -8,6 +8,7 @@ export interface IAvailableFunction {
   paramters?: {
     properties: {
       [key: string]: {
+        type: string
         description: string
       }
     }

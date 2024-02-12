@@ -8,6 +8,7 @@ export const AvailableFunctions: IAvailableFunctions = {
     paramters: {
       properties: {
         query: {
+          type: 'string',
           description: 'Search Query',
         },
       },
