@@ -81,7 +81,7 @@ export async function CopilotChatCompletion(request: FastifyRequest, reply: Fast
       temperature = message.content.temperature
   }
 
-  const res = await copilotClient(completions, {
+  const res = await copilotClient.native(`https://api.githubcopilot.com${completions}`, {
     method: 'POST',
     headers,
     body: JSON.stringify(requestBody),
@@ -91,8 +91,10 @@ export async function CopilotChatCompletion(request: FastifyRequest, reply: Fast
       throw new Error(`Request error: ${e.message}`)
     })
 
-  if (res instanceof Error)
-    throw new Error(`[Copilot] Request error: ${res.message}`)
+  if (!res.ok) {
+    consola.error(`[Copilot] Request error: ${res.statusText}.`)
+    throw new Error(`Request error: ${res.statusText}`)
+  }
 
   const stream = processStream(res).stream as any
 
