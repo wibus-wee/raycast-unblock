@@ -27,20 +27,18 @@ function generateRaycastAIServiceProviders() {
 
 function getDefaultInOpenAIModels() {
   const openaiConfig = getConfig('ai')?.openai
-  let default_model
+  let default_model = RAYCAST_DEFAULT_MODELS
   if (openaiConfig?.default) {
     const model = openaiConfig.models?.[openaiConfig.default]
     if (model) {
       default_model = {
-        chat: model.id,
-        quick_ai: model.id,
-        commands: model.id,
-        api: model.id,
+        chat: model.id!,
+        quick_ai: model.id!,
+        commands: model.id!,
+        api: model.id!,
       }
     }
-    else { default_model = RAYCAST_DEFAULT_MODELS }
   }
-  else { default_model = RAYCAST_DEFAULT_MODELS }
 
   return default_model
 }
