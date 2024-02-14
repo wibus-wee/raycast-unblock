@@ -13,47 +13,23 @@ Console.prototype.success = function (message: any, ...args: any[]) {
   this.log('\x1B[32m%s\x1B[0m', message, ...args)
 }
 
-function DebugInfo(mode: 'consola' | 'native', message: any, ...args: any[]) {
+function DebugConsole(mode: 'consola' | 'native', type: string, message: any, ...args: any[]) {
   const module = mode === 'native' ? console : consola
   if (process.env.DEBUG || getConfig('general')?.debug)
-    return module.info(`[DEBUG]`, message, ...args)
-}
-
-function DebugSuccess(mode: 'consola' | 'native', message: any, ...args: any[]) {
-  const module = mode === 'native' ? console : consola
-  if (process.env.DEBUG || getConfig('general')?.debug)
-    return module.success(`[DEBUG]`, message, ...args)
-}
-
-function DebugWarn(mode: 'consola' | 'native', message: any, ...args: any[]) {
-  const module = mode === 'native' ? console : consola
-  if (process.env.DEBUG || getConfig('general')?.debug)
-    return module.warn(`[DEBUG]`, message, ...args)
-}
-
-function DebugError(mode: 'consola' | 'native', message: any, ...args: any[]) {
-  const module = mode === 'native' ? console : consola
-  if (process.env.DEBUG || getConfig('general')?.debug)
-    return module.error(`[DEBUG]`, message, ...args)
-}
-
-function DebugLog(mode: 'consola' | 'native', message: any, ...args: any[]) {
-  const module = mode === 'native' ? console : consola
-  if (process.env.DEBUG || getConfig('general')?.debug)
-    return module.log(message, ...args)
+    return (module as any)[type](`[DEBUG]`, message, ...args)
 }
 
 export const Debug = {
-  info: (message: any, ...args: any[]) => DebugInfo('consola', message, ...args),
-  success: (message: any, ...args: any[]) => DebugSuccess('consola', message, ...args),
-  warn: (message: any, ...args: any[]) => DebugWarn('consola', message, ...args),
-  error: (message: any, ...args: any[]) => DebugError('consola', message, ...args),
-  log: (message: any, ...args: any[]) => DebugLog('consola', message, ...args),
+  info: (message: any, ...args: any[]) => DebugConsole('consola', 'info', message, ...args),
+  success: (message: any, ...args: any[]) => DebugConsole('consola', 'success', message, ...args),
+  warn: (message: any, ...args: any[]) => DebugConsole('consola', 'warn', message, ...args),
+  error: (message: any, ...args: any[]) => DebugConsole('consola', 'error', message, ...args),
+  log: (message: any, ...args: any[]) => DebugConsole('consola', 'log', message, ...args),
   native: {
-    info: (message: any, ...args: any[]) => DebugInfo('native', message, ...args),
-    success: (message: any, ...args: any[]) => DebugSuccess('native', message, ...args),
-    warn: (message: any, ...args: any[]) => DebugWarn('native', message, ...args),
-    error: (message: any, ...args: any[]) => DebugError('native', message, ...args),
-    log: (message: any, ...args: any[]) => DebugLog('native', message, ...args),
+    info: (message: any, ...args: any[]) => DebugConsole('native', 'info', message, ...args),
+    success: (message: any, ...args: any[]) => DebugConsole('native', 'success', message, ...args),
+    warn: (message: any, ...args: any[]) => DebugConsole('native', 'warn', message, ...args),
+    error: (message: any, ...args: any[]) => DebugConsole('native', 'error', message, ...args),
+    log: (message: any, ...args: any[]) => DebugConsole('native', 'log', message, ...args),
   },
 }
