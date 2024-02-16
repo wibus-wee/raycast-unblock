@@ -1,4 +1,4 @@
-FROM node:21-alpine as builder
+FROM --platform=$BUILDPLATFORM node:21-alpine as builder
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN pnpm build:rollup
 RUN pnpm bundle
 
 
-FROM alpine:3.19 as runner
+FROM --platform=$BUILDPLATFORM alpine:3.19 as runner
 
 RUN apk add --no-cache libstdc++
 
