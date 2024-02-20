@@ -40,6 +40,7 @@ export function launch() {
       headers: request.headers as Record<string, string>,
       method: 'GET',
       baseURL: 'https://backend.raycast.com', // This is the only difference
+      redirect: 'manual',
     }).catch((reason) => {
       consola.error(`[GET] ${subUrl} <-- 托底策略 <-x- Backend Response Error`)
       consola.error(reason)
