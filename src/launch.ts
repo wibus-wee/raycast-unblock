@@ -36,7 +36,7 @@ export function launch() {
       ...request.headers,
       host: 'backend.raycast.com',
     }
-    const backendResponse = await httpClient(`/${(request.params as any)['*']}`, {
+    const backendResponse = await httpClient(request.url, {
       headers: request.headers as Record<string, string>,
       method: 'GET',
       baseURL: 'https://backend.raycast.com', // This is the only difference
