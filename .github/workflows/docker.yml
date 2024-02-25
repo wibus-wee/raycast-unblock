@@ -10,7 +10,7 @@ on:
       - README.md
       - LICENSE
       - .github/workflows/release.yml
-  pull_request:
+  pull_request_target:
     branches: [main]
 
 jobs:
