@@ -30,16 +30,19 @@ export function launch() {
   })
 
   fastify.get('/*', async (request, reply) => {
-    const subUrl = request.url.substr(0, 30)
+    const subUrl = request.url.substring(0, 30)
     Debug.info(`[GET] ${subUrl} <-- 托底策略 --> Backend Request`)
+
+    const url = new URL(request.url, 'https://backend.raycast.com')
+
     request.headers = {
       ...request.headers,
       host: 'backend.raycast.com',
     }
-    const backendResponse = await httpClient(request.url, {
+
+    const backendResponse = await httpClient.native(url, {
       headers: request.headers as Record<string, string>,
       method: 'GET',
-      baseURL: 'https://backend.raycast.com', // This is the only difference
       redirect: 'manual',
     }).catch((reason) => {
       consola.error(`[GET] ${subUrl} <-- 托底策略 <-x- Backend Response Error`)
