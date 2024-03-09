@@ -127,45 +127,23 @@ If you want to run it in the background, you can use `pm2` or `nohup`.
 
 ### Use it with Surge
 
-1. Go to [wibus-wee/activation-script](https://github.com/wibus-wee/activation-script) and follow the instructions to get the activation script.
-
-> [!NOTE]
->
-> If you modified the `general.port` in the `config.toml` file, you should modify activator script to make it work properly
->
-> ```diff
-> - "http://127.0.0.1:3000"
-> + "<Your Remote Server Address>"
-> ```
->
-> [Related Source Code](https://github.com/wibus-wee/activation-script/blob/main/src/modules/index.ts#L83C14-L83C35)
-
-1. Get your Surge config file and modify it like this: (Normally, `wibus-wee/activation-script` will help you modify this config file)
-
-```conf
-[MITM]
-skip-server-cert-verify = true
-h2 = true
-hostname = *.raycast.com, <Your Original Proxy Hostname...>
-ca-passphrase = <Your Original CA Passphrase>
-ca-p12 = <Your Original CA P12 Setting>
-
-[Script]
-raycast-activate-backend.raycast.com = type=http-request,pattern=^https://backend.raycast.com,max-size=0,debug=1,script-path=activator.js
-<Your Original Scripts...>
-```
-
-3. Run Surge with the modified config file.
-4. Set your system proxy to Surge.
-5. Run Raycast Unblock.
-6. Enjoy!
-
 > [!WARNING]
 > In some cases, if you find that Raycast Unblock is not working properly, please go to the settings of Surge, and uncheck the last line `*` in `Surge -> HTTP -> Capture(捕获) -> Capture MITM Overrides(捕获 MITM 覆写)`, which is `Modify MITM Hostname`.
+
+1. Go to [wibus-wee/activation-script](https://github.com/wibus-wee/activation-script) and follow the installation instructions.
+2. Run Raycast Unblock and Surge.
+3. Open Raycast and use the features in the Pro Plan.
+
+> [!NOTE]
+> At present, activation-script will not forward the requests of Translate to Raycast Unblock by default, but will immediately forward the requests to DeepLX in the script. If you need to use the translation function of Raycast Unblock, you need to modify the code manually, please refer to the documentation of activation-script for details.
 
 ### If you don't have Surge
 
 You need to throw all Raycast requests to the backend built by this project, but make sure that the backend can request Raycast Backend normally, because some functions need to request Raycast Backend once and then do it.
+
+#### Other Proxy Tools
+
+You can refer to the code in [wibus-wee/activation-script](https://github.com/wibus-wee/activation-script) and port it to other agent tools to continue using MiTM to hijack.
 
 #### Hosts
 
