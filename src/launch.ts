@@ -50,7 +50,15 @@ export function launch() {
       return reply.send(reason)
     })
     Debug.info(`[GET] ${subUrl} <-- 托底策略 <-- Backend Response`)
-    return reply.send(backendResponse)
+
+    const responseHeaders = new Headers(backendResponse.headers)
+    responseHeaders.delete('content-encoding')
+
+    return reply.send(new Response(backendResponse.body, {
+      status: backendResponse.status,
+      statusText: backendResponse.statusText,
+      headers: responseHeaders,
+    }))
   })
 
   consola.info(`Raycast Unblock`)
