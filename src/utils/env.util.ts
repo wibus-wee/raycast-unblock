@@ -14,8 +14,8 @@ import { matchKeyInObject, toCamelCaseInObject, tolowerCaseInObject, transformTo
  * It may be configured to a non-existent model, in this case, it needs to be removed
  */
 function checkOpenAIDefaultModelConfig(env: Config) {
-  if (env.ai?.openai?.default?.toLowerCase() && !(env.ai.openai.models as any)[env.ai.openai.default?.toLowerCase()]) {
-    consola.warn(`The default AI model [${env.ai.openai.default?.toLowerCase()}] is not available, it will be removed from the config`)
+  if (env.ai?.openai?.default && !(env.ai.openai.models as any)[env.ai.openai.default]) {
+    consola.warn(`The default AI model [${env.ai.openai.default}] is not available (available models: [${Object.keys(env.ai.openai.models || {}).join(', ')}]), it will be removed from the config`)
     // delete env.ai.openai.default
     if (env.ai.openai.default)
       delete env.ai.openai.default
