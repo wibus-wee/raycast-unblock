@@ -28,7 +28,7 @@ max_tokens = 100
 # the default model written in the code will be used
 # default = "gpt-3.5-turbo-16k.legacy"
 # You can edit the base_url if you want to use the custom OpenAI server
-# base_url = "https://api.openai.com"
+# base_url = "https://api.openai.com/v1"
 api_key = "YOUR_API_KEY"
 
 # if you'd like to use azure openai
