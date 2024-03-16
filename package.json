@@ -33,7 +33,7 @@
   ],
   "scripts": {
     "build": "unbuild",
-    "build:rollup": "rollup -c",
+    "build:rollup": "NODE_OPTIONS=--max-old-space-size=4096 rollup -c",
     "bundle": "sh scripts/single-application.sh",
     "dev": "pnpm start:dev",
     "lint": "eslint .",
