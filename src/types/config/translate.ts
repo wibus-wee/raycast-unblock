@@ -10,6 +10,7 @@ export interface DeepLXTranslateServiceConfig {
 }
 export interface AITranslateServiceConfig {
   default?: string
+  model?: string
 }
 export interface LibreTranslateServiceConfig {
   baseUrl?: string

@@ -5,7 +5,7 @@ import type { AIGenerateContent } from '../../../types/internal/ai-generate-cont
 export async function OpenaiGenerateContent(prompt: {
   role: string
   content: string
-}[], msg?: string): Promise<AIGenerateContent> {
+}[], model?: string): Promise<AIGenerateContent> {
   const aiConfig = getConfig('ai')
   const openaiConfig = getConfig('ai')?.openai
   const openai = new OpenAI({
@@ -20,12 +20,7 @@ export async function OpenaiGenerateContent(prompt: {
       content: m.content,
     })
   }
-  if (msg) {
-    message.push({
-      role: 'system',
-      content: msg,
-    })
-  }
+
   const result = await openai.chat.completions.create({
     stream: false,
     messages: message as any,
@@ -33,7 +28,7 @@ export async function OpenaiGenerateContent(prompt: {
     stop: null,
     n: 1,
     max_tokens: openaiConfig?.maxTokens || aiConfig?.maxTokens,
-    model: openaiConfig?.default || 'gpt-3.5-turbo',
+    model: model || 'gpt-3.5-turbo',
   }).catch((err) => {
     throw new Error(`[AI] OpenAI Chat Completions Failed: ${err}`)
   })

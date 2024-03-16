@@ -26,15 +26,15 @@ export async function TranslateWithAI(request: FastifyRequest): Promise<Translat
     case 'gemini':
       content = await GeminiGenerateContent(prompts)
       break
-    case 'openai':
-      content = await OpenaiGenerateContent(prompts)
-      break
     case 'copilot':
       content = await CopilotGenerateContent(prompts)
       break
-    default:
-      content = await OpenaiGenerateContent(prompts)
+    case 'openai':
+    default: {
+      const model = getConfig('translate')?.ai?.model
+      content = await OpenaiGenerateContent(prompts, model)
       break
+    }
   }
 
   const res = {
