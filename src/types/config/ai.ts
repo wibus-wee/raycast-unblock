@@ -30,6 +30,6 @@ export interface AIServiceModelsConfig {
     model: string
     name?: string
     provider?: string
-    provider_name?: string
+    providerName?: string
   }
 }
