@@ -82,6 +82,10 @@ default = "deeplx"
 # the default model written in the code will be used
 # Default: openai
 default = "openai"
+# The model used by the AI service
+# (only effective for openai)
+# Default: gpt-3.5-turbo
+model = "gpt-3.5-turbo"
 
 [Translate.LibreTranslate]
 base_url = "https://libretranslate.com"
