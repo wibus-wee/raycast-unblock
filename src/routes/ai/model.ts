@@ -31,11 +31,13 @@ function getDefaultInOpenAIModels() {
   if (openaiConfig?.default) {
     const model = openaiConfig.models?.[openaiConfig.default]
     if (model) {
+      const id = model.id || openaiConfig.default
+
       default_model = {
-        chat: model.id!,
-        quick_ai: model.id!,
-        commands: model.id!,
-        api: model.id!,
+        chat: id,
+        quick_ai: id,
+        commands: id,
+        api: id,
       }
     }
   }
