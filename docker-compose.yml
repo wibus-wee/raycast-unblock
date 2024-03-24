@@ -9,9 +9,14 @@ services:
     image: wibuswee/raycast-unblock:latest
     environment:
       - TZ=Asia/Shanghai
+      # ## You can also use proxy settings here, such as the following
+      # - HTTP_PROXY=
+      # - HTTPS_PROXY=
     # ## If you need to use config.toml file, please uncomment the following line ####
     volumes:
       - ./configs/raycast-unblock:/app/config
+      # If you want to operate the Sync file, you can uncomment the following line
+      # - ./raycast_sync:/root/raycast_sync
     ports:
       - '3000:3000'
     restart: always
