@@ -6,7 +6,7 @@ import { parse } from 'toml'
 import destr from 'destr'
 import type { Config } from '../types/config'
 import { Debug } from './log.util'
-import { matchKeyInObject, toCamelCaseInObject, tolowerCaseInObject, transformToString } from './others.util'
+import { getValueFromDotNotation, matchKeyInObject, toCamelCaseInObject, tolowerCaseInObject, transformToString } from './others.util'
 
 /**
  * Check the default OpenAI model configuration.
@@ -68,12 +68,32 @@ export function injectEnv() {
   }
 }
 
-export function getConfig<T extends keyof Config>(key?: T): Config[T] {
+export function getConfig<T extends keyof Config>(key?: T, inKey?: string): Config[T] {
   const env = process.env.config
   if (env) {
     const config = destr<Config>(env)
-    if (key)
+    if (key) {
+      // Debug.info(`[Config] Get config key [${key}]`)
+      if (key.includes('.')) {
+        Debug.info(`[Config] Get config key [${key}] with dot notation`)
+        return getValueFromDotNotation(config, key)
+      }
+      if (inKey) {
+        if (inKey.includes('.')) {
+          Debug.info(`[Config] Get config key [${key}] with dot notation`)
+          return getValueFromDotNotation(config[key], inKey)
+        }
+        else {
+          Debug.info(`[Config] Get config key [${key}] with inKey [${inKey}]`)
+          const _c = config as any
+          if (_c[inKey] && _c[inKey][key])
+            return _c[inKey][key]
+          else
+            return {}
+        }
+      }
       return config[key]
+    }
     return config as Config[T]
   }
   return {} as Config[T]
