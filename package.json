@@ -46,36 +46,36 @@
   "dependencies": {
     "@azure/openai": "1.0.0-beta.11",
     "@fastify/compress": "^7.0.0",
-    "@google/generative-ai": "^0.2.0",
+    "@google/generative-ai": "^0.3.1",
     "@ifyour/deeplx": "^0.1.17",
     "consola": "^3.2.3",
     "destr": "^2.0.2",
     "fastify": "^4.26.0",
     "fastify-sse-v2": "^3.1.2",
     "ofetch": "^1.3.3",
-    "openai": "^4.26.0",
+    "openai": "^4.29.2",
     "toml": "^3.0.0",
     "uuid": "^9.0.1",
     "zx": "^7.2.3"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.6.2",
+    "@antfu/eslint-config": "^2.11.3",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/node": "^20.11.16",
     "@types/uuid": "^9.0.8",
-    "bumpp": "^9.3.0",
-    "eslint": "^8.56.0",
-    "esno": "^4.0.0",
+    "bumpp": "^9.4.0",
+    "eslint": "^8.57.0",
+    "esno": "^4.7.0",
     "lint-staged": "^15.2.0",
     "pnpm": "^8.15.1",
-    "rollup": "^4.9.6",
+    "rollup": "^4.13.1",
     "rollup-plugin-esbuild": "^6.1.1",
-    "simple-git-hooks": "^2.9.0",
+    "simple-git-hooks": "^2.11.1",
     "tslib": "^2.6.2",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.3",
     "unbuild": "^2.0.0"
   },
   "pnpm": {
@@ -84,7 +84,7 @@
     }
   },
   "resolutions": {
-    "@babel/traverse": "7.23.9",
+    "@babel/traverse": "7.24.1",
     "node-fetch": "./external/node-fetch"
   },
   "simple-git-hooks": {
